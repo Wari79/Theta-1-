@@ -161,8 +161,9 @@ class errors(commands.Cog):
 
           
         elif isinstance(error, CommandNotFound):
-            com = discord.Embed(title="Unkown Command", description=f"Sorry, this command was not found in the bot", color=red)
-            await ctx.reply(embed=com)
+            #com = discord.Embed(title="Unkown Command", description=f"Sorry, this command was not found in the bot", color=red)
+            #await ctx.reply(embed=com)
+            await ctx.message.add_reaction("❌")
 
         elif isinstance(error, commands.CommandOnCooldown):
             cd = round(error.retry_after)

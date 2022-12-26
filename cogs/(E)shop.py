@@ -721,6 +721,11 @@ class shop(commands.Cog):
       
               await confirmation.edit(embed=ask, view=None)
               amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+              if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
                 
                   
               await confirmation.delete()
@@ -770,6 +775,11 @@ class shop(commands.Cog):
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
             
               
             await confirmation.delete()
@@ -821,6 +831,11 @@ class shop(commands.Cog):
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
             
               
             await confirmation.delete()
@@ -865,6 +880,11 @@ class shop(commands.Cog):
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
             
               
             await confirmation.delete()
@@ -909,6 +929,11 @@ class shop(commands.Cog):
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
             
               
             await confirmation.delete()
@@ -957,6 +982,11 @@ class shop(commands.Cog):
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
             
               
             await confirmation.delete()
@@ -1011,6 +1041,11 @@ class shop(commands.Cog):
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if not amount.content[0].isnumeric():
+                invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+                await amount.reply(embed=invamount)
+                return
             
               
             await confirmation.delete()

@@ -560,82 +560,53 @@ class actions(commands.Cog):
             await ctx.reply(embed=fail)
             ctx.command.reset_cooldown(ctx)
       if member_data2.spy > 0:
+        button_c = Button(label="✔", style=discord.ButtonStyle.green)
+        button_x = Button(label = "❌", style=discord.ButtonStyle.red)
+    
+        view = View()
+        view.add_item(button_c)
+        view.add_item(button_x)
         confirmation = discord.Embed(description=f"Commander, are you sure that you want to spy on {commander.name}'s base?", color=green)
-        message = await ctx.reply(embed=confirmation)
-        await message.add_reaction("✅")
-        await message.add_reaction("❌")
-        def check(reaction, user):
-          return user == ctx.author
-        reaction = None
-        while True:
-          if str(reaction) == "✅":
+        message = await ctx.reply(embed=confirmation, view=view)
+        
+        async def button_c_c(interaction):
+          if interaction.user == ctx.author:
             await ctx.message.delete()
             member_data2.spy -= 1
             save_member_data(ctx.author.id, member_data2)
-            await message.clear_reactions()
             member_data = load_member_data(commander.id)
             health1 = member_data.soldiers * 1
             health2 = member_data.soldiers * 1 + member_data.tanks * 10
-    
-            embed = discord.Embed(title=f"{commander.name}'s Base", color=red)
       
-            embed.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = False)
-            embed.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}", inline = False)
-            embed.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}", inline = False)
-            embed.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-            embed.add_field(name="Total HP", value=f"{health2} {hearts}", inline = False)
-      #----
+              
             embeds = discord.Embed(title=f"{commander.name}'s Base", color=red)
-      
+        
             embeds.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = False)
             embeds.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}\n{str(member_data.spy)} :detective:", inline = False)
             embeds.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}", inline = False)
             embeds.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
             embeds.add_field(name="Total HP", value=f"{health2} {hearts}", inline = False)
-
-      #---
-
-            embedsp = discord.Embed(title=f"{commander.name}'s Base", color=red)
-      
-            embedsp.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = False)
-            embedsp.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.spy)} :detective:", inline = False)
-            embedsp.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}", inline = False)
-            embedsp.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-            embedsp.add_field(name="Total HP", value=f"{health2} {hearts}", inline = False)
-      
-      #----
-     
-            embed2 = discord.Embed(title=f"{commander.name}'s Base", color=red)
-            embed2.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = False)
-            embed2.add_field(name="Army", value=f"Soldiers : {str(member_data.soldiers)} {sold}", inline = False)
-            embed2.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}", inline = False)
-            embed2.add_field(name="Wealth", value=f"Resources : {str(member_data.resources)} {res}", inline = False)
-            embed2.add_field(name="Total HP", value=f"{health1} {hearts}", inline = False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
-
-            if member_data.tanks <= 0 and member_data.spy <=0:
-              await ctx.author.send(embed=embed2)
-            if member_data.tanks > 0 and member_data.spy <= 0:
-              await ctx.author.send(embed=embed)
-            if member_data.tanks <= 0 and member_data.spy > 0:
-              await ctx.author.send(embed=embedsp)
-            if member_data.tanks > 0 and member_data.spy > 0:
-             await ctx.author.send(embed=embeds)
-            done = discord.Embed(description = "Enemy's database accessed, spying successful, intel has been gathered.\n-\n**This message is self-distructory and will be deleted in 5 seconds**", color=green)
-            await message.edit(embed=done, delete_after=5.0)
-          elif str(reaction) == "❌":
-            await ctx.message.add_reaction("✅")
-            await message.clear_reactions()
-            cancel = discord.Embed(description="Spying sequence cancelled **this message is self-destructory and will be deleted in 5 seconds**",color=0xFF0000)
-            await message.edit(embed=cancel, delete_after=5.0)
+  
+            embeds.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
+  
+              
+            await interaction.response.send_message(embed=embeds, ephemeral=True)
+            await message.delete()
+            return
+          else:
+            await interaction.response.send_message("This option is not for you!", ephemeral=True)
+        async def button_x_c(interaction):
+          if interaction.user == ctx.author:
+            await ctx.message.delete()
+            await message.delete()
+            await interaction.response.send_message("Cancelled spy operation :white_check_mark:", ephemeral=True)
             ctx.command.reset_cooldown(ctx)
-          try:
-              reaction, user = await self.client.wait_for(
-                "reaction_add", timeout=35.0, check=check
-            )
-              await message.remove_reaction(reaction, user)
-          except:
-              break
+            return
+          else:
+            await interaction.response.send_message("This option is not for you!", ephemeral=True)
+        button_c.callback = button_c_c
+        button_x.callback = button_x_c
+          
       
 
 
@@ -769,6 +740,8 @@ class actions(commands.Cog):
         trader_oemoji = res
       if trader_oi == "crate" or trader_oi == "crates":
         trader_oemoji = crate
+      if trader_oi == "ca" or trader_oi == "Ca":
+        trader_oemoji = ca
 
       #-------
 
@@ -786,6 +759,8 @@ class actions(commands.Cog):
           user_oemoji = res
       if user_oi == "crate" or user_oi == "crates":
         user_oemoji = crate
+      if user_oi == "ca" or user_oi == "Ca":
+        user_oemoji = ca
 
         
       

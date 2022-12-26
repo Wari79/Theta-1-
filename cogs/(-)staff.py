@@ -16,7 +16,7 @@ from googletrans import Translator
 import traceback
 import sys
 import time
-from emojis import suit, tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow
+from emojis import suit, tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv
 data_filename = "currency files/data"
 from discord import app_commands
 
@@ -51,12 +51,11 @@ class Data:
 class staff(commands.Cog):
     def __init__(self, client):
         self.client = client
+        #discord.Colour.random()
         
 
     
-    @app_commands.command(description="Slash commands coming soon!")
-    async def slash(self, int: discord.Interaction):
-      await int.response.send_message("Full slash commands coming soon!")
+    
 
     @commands.command()
     @commands.is_owner()
@@ -64,9 +63,18 @@ class staff(commands.Cog):
         restart = discord.Embed(description="Restarting, wait for a confirmation message", color=green)
         await ctx.message.add_reaction("✅")
         await ctx.send(embed=restart, delete_after=8)
+        restart_bot()
+
+    @commands.command()
+    @commands.is_owner()
+    async def embed(self, ctx):
+      test_embed1 = discord.Embed(description="**0x2F3136**", color=0x2F3136)
+      test_embed2 = discord.Embed(description="**0x36393E**", color=0x36393E)
+      await ctx.send(embed=test_embed1)
+      await ctx.send(embed=test_embed2)
 
       
-        restart_bot()  
+          
     @commands.command(aliases = ["Developer commands", "Developer Commands", "developer commands"])
     async def dc(self, ctx):
       with open("prefix.json", "r", encoding="utf-8") as fp:
@@ -142,7 +150,10 @@ class staff(commands.Cog):
 
     @commands.command()
     async def emoji(self, ctx):
-      if len(ctx.guild.emojis) > 1:
+      if len(ctx.guild.emojis) <= 0:
+        non = discord.Embed(description="No available emojis are active in this server", color=inv)
+        await ctx.reply(embed=non)
+      if len(ctx.guild.emojis) >= 1:
         
         
         emoji_string = '\n'.join(f"<{'a' if _.animated else ''}:{_.name}:{_.id}> {_.id}" for num, _ in enumerate(ctx.guild.emojis, start=1)) if len(ctx.guild.emojis) > 0 else "None"

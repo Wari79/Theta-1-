@@ -5,17 +5,19 @@ import pickle
 import random
 import asyncio
 import json
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, crates, ar
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, crates, ar, inv
 from places import desert, ba, ruins
 
 from discord.ui import *
+from discord import app_commands
 
 
 
 data_filename = "currency files/data"
+data_filename2 = "levels/levels"
 
 class Data:
-      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg):
+      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg, xp, level):
         self.resources = resources
         self.soldiers = soldiers
         self.tanks = tanks
@@ -31,6 +33,8 @@ class Data:
         self.ca = ca
         self.cfc = cfc
         self.cfca = cfca
+        self.xp = xp
+        self.level = level
 
 
 class income(commands.Cog):
@@ -52,7 +56,7 @@ class income(commands.Cog):
 #-------------------------------------------------------------------------
 #------------------------------------------------------------------------- #-------------------------------------------------------------------------   
 
-    @commands.command(aliases = ["Recruit"])
+    @commands.hybrid_command(description="Recruit some soldiers!", aliases = ["Recruit"]) 
     @commands.guild_only()
     @cooldown(1, per_sec=15, type=commands.BucketType.user)
     async def recruit(self, ctx):
@@ -64,18 +68,21 @@ class income(commands.Cog):
       
         member_data.soldiers += int(option)
 
-        s2 = discord.Embed(description=f"**Recruit sequence completed**, you recruited **{option} {sold}**", color=0x567d46)
+        s2 = discord.Embed(description=f"**Recruit sequence completed**, you recruited **{option} {sold}**", color=inv)
         
 
         await ctx.reply(embed=s2)
       
         save_member_data(ctx.author.id, member_data)
-        member_data = load_member_data(ctx.author.id)
+        member_data2 = load_member_data2(ctx.author.id)
+        member_data2.xp += 1
+        save_member_data2(ctx.author.id, member_data2)
         if member_data.s >= 150:
           pass
         if member_data.s < 150:
           member_data.s += 1
           save_member_data(ctx.author.id, member_data)
+        
 
       
 #-------------------------------------------------------------------------
@@ -83,7 +90,7 @@ class income(commands.Cog):
 
 
     
-    @commands.command(aliases = ["explore", "Explore"])
+    @commands.hybrid_command(description="Collect and search for some resources!",aliases = ["explore", "Explore"])
     @commands.guild_only()
     @cooldown(1, per_sec=15, type=commands.BucketType.user)
     # @cooldown(1, per_sec=5, type=commands.BucketType.user)
@@ -123,7 +130,7 @@ class income(commands.Cog):
        
       
        
-      search = discord.Embed(description=f"**Where do you want to complete your expedition?**", color=0x309730)
+      search = discord.Embed(description=f"**Where do you want to complete your expedition?**", color=inv)
       rep = await ctx.reply(embed=search, view=view)
       
 
@@ -145,6 +152,10 @@ class income(commands.Cog):
           member_data.resources += int(ruinsc)
           save_member_data(ctx.author.id, member_data) 
           await interaction.response.send_message(f"{res_b1} {res} {ar} {res_b11} {res}", ephemeral=True)
+          
+          member_data2 = load_member_data2(ctx.author.id)
+          member_data2.xp += 1
+          save_member_data2(ctx.author.id, member_data2)
   
         
           if member_data.r >= 150:
@@ -171,6 +182,10 @@ class income(commands.Cog):
           member_data.resources += int(bac)
           save_member_data(ctx.author.id, member_data) 
           await interaction.response.send_message(f"{res_b2} {res} {ar} {res_b22} {res}", ephemeral=True)
+
+          member_data2 = load_member_data2(ctx.author.id)
+          member_data2.xp += 1
+          save_member_data2(ctx.author.id, member_data2)
   
           if member_data.r >= 150:
             pass
@@ -194,6 +209,10 @@ class income(commands.Cog):
           member_data.resources += int(dec)
           save_member_data(ctx.author.id, member_data) 
           await interaction.response.send_message(f"{res_b3} {res} {ar} {res_b33} {res}", ephemeral=True)
+
+          member_data2 = load_member_data2(ctx.author.id)
+          member_data2.xp += 1
+          save_member_data2(ctx.author.id, member_data2)
           
           if member_data.r >= 150:
             pass
@@ -223,28 +242,28 @@ class income(commands.Cog):
         await ctx.reply(embed=error)
       else:
         async with ctx.typing():
-          start = discord.Embed(description=f"[C-------- {crates}]", color=green)
+          start = discord.Embed(description=f"[C-------- {crates}]", color=discord.Colour.random())
           message = await ctx.reply(embed=start)
           await asyncio.sleep(1.5)
-          start2 = discord.Embed(description=f"[Co------- {sold}]", color=green)
+          start2 = discord.Embed(description=f"[Co------- {sold}]", color=discord.Colour.random())
           await message.edit(embed=start2)
           await asyncio.sleep(1.5)
-          start3 = discord.Embed(description=f"[Com------ {spy}]", color=green)
+          start3 = discord.Embed(description=f"[Com------ {spy}]", color=discord.Colour.random())
           await message.edit(embed=start3)
           await asyncio.sleep(1.5)
-          start4 = discord.Embed(description=f"[Comp----- {tank}]", color=green)
+          start4 = discord.Embed(description=f"[Comp----- {tank}]", color=discord.Colour.random())
           await message.edit(embed=start4)
           await asyncio.sleep(1.5)
-          start5 = discord.Embed(description=f"[Compl---- {res}]", color=green)
+          start5 = discord.Embed(description=f"[Compl---- {res}]", color=discord.Colour.random())
           await message.edit(embed=start5)
           await asyncio.sleep(1.5)
-          start6 = discord.Embed(description=f"[Comple--- {strike}]", color=green)
+          start6 = discord.Embed(description=f"[Comple--- {strike}]", color=discord.Colour.random())
           await message.edit(embed=start6)
           await asyncio.sleep(1.5)
-          start7 = discord.Embed(description=f"[Complet-- {wall}]", color=green)
+          start7 = discord.Embed(description=f"[Complet-- {wall}]", color=discord.Colour.random())
           await message.edit(embed=start7)
           await asyncio.sleep(1.5)
-          start8 = discord.Embed(description=f"[Complete- {tank2}]", color=green)
+          start8 = discord.Embed(description=f"[Complete- {tank2}]", color=discord.Colour.random())
           await message.edit(embed=start8)
           await asyncio.sleep(1.5)
           start9 = discord.Embed(description=f"[Completed openning {crates}!]", color=green)
@@ -302,7 +321,7 @@ def load_member_data(member_ID):
     data = load_data()
 
     if member_ID not in data:
-        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
     return data[member_ID]
 
@@ -312,4 +331,35 @@ def save_member_data(member_ID, member_data):
     data[member_ID] = member_data
 
     with open(data_filename, "wb") as file:
+        pickle.dump(data, file)
+
+
+
+
+
+
+
+
+def load_data2():
+        if os.path.isfile(data_filename2):
+            with open(data_filename2, "rb") as file:
+              return pickle.load(file)
+        else:
+            return dict()
+
+
+def load_member_data2(member_ID):
+    data = load_data2()
+
+    if member_ID not in data:
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+    return data[member_ID]
+
+def save_member_data2(member_ID, member_data2):
+    data = load_data2()
+
+    data[member_ID] = member_data2
+
+    with open(data_filename2, "wb") as file:
         pickle.dump(data, file)

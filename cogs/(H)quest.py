@@ -21,10 +21,11 @@ from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike
 
 
 data_filename = "currency files/data"
+data_filename2 = "levels/levels"
 
 
 class Data:
-      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg):
+      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg, xp, level):
         self.resources = resources
         self.soldiers = soldiers
         self.tanks = tanks
@@ -40,6 +41,8 @@ class Data:
         self.ca = ca
         self.cfc = cfc
         self.cfca = cfca
+        self.xp = xp
+        self.level = level
         
 
 class quest(commands.Cog):
@@ -101,7 +104,7 @@ class quest(commands.Cog):
         member = ctx.author
       member_data = load_member_data(member.id)
       member_data.s -= int(amount)
-      save_member_data3(member.id, member_data)
+      save_member_data(member.id, member_data)
       sub = discord.Embed(description=f"Successfully subtracted {amount} from {member.name}", color=red)
       await ctx.send(embed=sub)
       ss1 = discord.Embed(description=f"Commander, you were subtracted {amount} points in your on-going ` Quest 2 ` by the system operators.", color=yellow)
@@ -121,6 +124,76 @@ class quest(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
       member_data = load_member_data(message.author.id)
+      member_data2 = load_member_data2(message.author.id)
+      
+      
+      if member_data2.xp >= 5 and member_data2.level <= 0:
+        member_data2.level += 1
+        member_data2.xp = 0
+        member_data.resources += 250
+        save_member_data2(message.author.id, member_data2)
+        save_member_data(message.author.id, member_data)
+              
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 250 {res}", color=green)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
+        return
+      else:
+        pass
+        
+      if member_data2.xp >= 10 and member_data2.level <= 1:
+        member_data2.level += 1
+        member_data2.xp = 0
+        save_member_data2(message.author.id, member_data2)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`", color=green)
+        await message.channel.send(embed=lvl)
+        return
+      else:
+        pass
+
+      if member_data2.xp >= 15 and member_data2.level <= 2:
+        member_data2.level += 1
+        member_data2.xp = 0
+        member_data.wall += 1
+        member_data.resources += 250
+        save_member_data2(message.author.id, member_data2)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 250 {res}\n> 1 {wall}", color=green)
+        await message.channel.send(embed=lvl)
+        return
+      else:
+        pass
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
       
       if member_data.mesg >= 1:
         with open("Quests/(A)redeem.json") as json_file:
@@ -280,7 +353,7 @@ def load_member_data(member_ID):
     data = load_data()
 
     if member_ID not in data:
-        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0)
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0)
 
     return data[member_ID]
 
@@ -290,6 +363,34 @@ def save_member_data(member_ID, member_data):
     data[member_ID] = member_data
 
     with open(data_filename, "wb") as file:
+        pickle.dump(data, file)
+
+
+
+
+
+def load_data2():
+        if os.path.isfile(data_filename2):
+            with open(data_filename2, "rb") as file:
+              return pickle.load(file)
+        else:
+            return dict()
+
+
+def load_member_data2(member_ID):
+    data = load_data2()
+
+    if member_ID not in data:
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0)
+
+    return data[member_ID]
+
+def save_member_data2(member_ID, member_data2):
+    data = load_data2()
+
+    data[member_ID] = member_data2
+
+    with open(data_filename2, "wb") as file:
         pickle.dump(data, file)
 
 #--------------------------------------------------------

@@ -76,6 +76,8 @@ async def on_ready():
     await client.load_extension("cogs.(F)actions2")
     await client.load_extension("cogs.(H)quest")
     await client.load_extension("cogs.(C)income")
+    await client.load_extension("cogs.(I)levels")
+    await client.load_extension("cogs.(Extra)ahmed")
     
     
 
@@ -93,9 +95,18 @@ async def r(ctx):
   await client.reload_extension("cogs.(F)actions2")
   await client.reload_extension("cogs.(H)quest")
   await client.reload_extension("cogs.(C)income")
+  await client.reload_extension("cogs.(I)levels")
+  await client.reload_extension("cogs.(Extra)ahmed")
   await asyncio.sleep(2)
-  third = discord.Embed(description="Refreshed **8** cog files", color=green)
+  third = discord.Embed(description="Refreshed **10** cog files", color=green)
   await second.edit(embed=third)
+
+@client.command()
+@commands.is_owner()
+async def sync(ctx):
+  await tree.sync()
+  sync_made = discord.Embed(description="Successfully synced slash commands!", color=green)
+  await ctx.reply(embed=sync_made)
 
 # @client.command()
 # @commands.is_owner()
@@ -103,11 +114,7 @@ async def r(ctx):
 #   ctx.client.tree.clear_commands(guild=ctx.guild)
 #   await ctx.send("done!")
 #   await tree.sync()
-@client.command()
-@commands.is_owner()
-async def sync(ctx):
-  await tree.sync()
-  await ctx.reply("done!")
+
 
 
 

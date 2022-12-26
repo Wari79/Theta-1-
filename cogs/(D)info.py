@@ -4,8 +4,10 @@ import os
 import pickle
 import asyncio
 import json
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv
 from discord.ui import *
+
+from discord import app_commands
 
 
 
@@ -21,9 +23,10 @@ sell = "https://media.discordapp.net/attachments/814828851724943361/103889278118
 col = 0x89CFF0
 
 data_filename = "currency files/data"
+data_filename2 = "levels/levels"
 
 class Data:
-      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg):
+      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg, xp, level):
         self.resources = resources
         self.soldiers = soldiers
         self.tanks = tanks
@@ -39,6 +42,8 @@ class Data:
         self.ca = ca
         self.cfc = cfc
         self.cfca = cfca
+        self.xp = xp
+        self.level = level
         
         
 
@@ -73,7 +78,7 @@ class info(commands.Cog):
 
       
       #Page 2: Base
-      p2 = discord.Embed(title="Your base, your root", description=f"> The base is the core of your adventure; everything you gain in the game will have an affect on your journey and your base, either positively or negatively. Your base contains  important sections;\n1) **Protection**\n2) **Army**\n3) **Specials**\n4) **Wealth**\n-\n> You may check your base using `{prefix}base`", color = red) 
+      p2 = discord.Embed(title="Your base, your root", description=f"> The base is the core of your adventure; everything you gain in the game will have an affect on your journey and your base, either positively or negatively. Your base contains  important sections;\n1) **Protection**\n2) **Army**\n3) **Specials**\n4) **Wealth**\n-\n> You may check your base using `/base`", color = red) 
 
       p2.set_image(url=base)
 
@@ -169,11 +174,11 @@ class info(commands.Cog):
 
 
   
-    @commands.command() 
+    @app_commands.command(description="Sends you your base!") 
     @commands.guild_only()
-    
-    async def base(self, ctx):
-      member_data = load_member_data(ctx.author.id)
+    async def base(self, int: discord.Interaction):
+      member_data = load_member_data(int.user.id)
+      member_data2 = load_member_data2(int.user.id)
       health1 = member_data.soldiers * 1
       health2 = member_data.soldiers * 1 + member_data.tanks * 10
 
@@ -181,94 +186,141 @@ class info(commands.Cog):
         member_data.strikes = 0
       if member_data.resources < 0:
         member_data.resources = 0
-    
-      embed = discord.Embed(title=f"{ctx.author.display_name}'s Base", color=0xfbc28d)
-      
-      embed.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}", inline = True)
-      embed.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
-      embed.add_field(name="Army", value=f"{member_data.strikes} {strike}\n{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}", inline = False)
-      embed.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}\n{member_data.scrap} {scrap}", inline = False)
-      embed.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-      embed.add_field(name="Total HP", value=f"{health2} {hearts}", inline = False)
-      embed.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
       #----
-      embeds = discord.Embed(title=f"{ctx.author.display_name}'s Base", color=0xfbc28d)
+      embeds = discord.Embed(title=f"{int.user.display_name}'s Base", color=0x36393F) #18191C #0x36393F
       
-      embeds.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}", inline = True)
+      embeds.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = True)
       embeds.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
-      embeds.add_field(name="Army", value=f"{member_data.strikes} {strike}\n{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}\n{str(member_data.spy)} :detective:", inline = False)
+      
+      embeds.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}\n{str(member_data.spy)} :detective:", inline = False)
+      
       embeds.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}\n{member_data.scrap} {scrap}", inline = False)
       embeds.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-      embeds.add_field(name="Total HP", value=f"{health2} {hearts}", inline = False)
+      embeds.add_field(name="Total HP", value=f"{health2} {hearts}", inline = True)
+      if member_data2.level <= 0:
+        required = "5"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
+      if member_data2.level == 1:
+        required = "10"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up") 
+        
+      if member_data2.level == 2:
+        required = "15"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up") 
+        
+      
+
+
+
+        
       embeds.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
-
-      #---
-
-      embedsp = discord.Embed(title=f"{ctx.author.display_name}'s Base", color=0xfbc28d)
       
-      embedsp.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}", inline = True)
-      embedsp.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
-      embedsp.add_field(name="Army", value=f"{member_data.strikes} {strike}\n{str(member_data.soldiers)} {sold}\n{str(member_data.spy)} :detective:", inline = False)
-      embedsp.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}\n{member_data.scrap} {scrap}", inline = False)
-      embedsp.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-      embedsp.add_field(name="Total HP", value=f"{health2} {hearts}", inline = False)
-      embedsp.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
       
-      #----
-     
-      embed2 = discord.Embed(title=f"{ctx.author.display_name}'s Base", color=0xfbc28d)
-      embed2.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}", inline = True)
-      embed2.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
-      embed2.add_field(name="Army", value=f"{member_data.strikes} {strike}\n{str(member_data.soldiers)} {sold}", inline = False)
-      embed2.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}\n{member_data.scrap} {scrap}", inline = False)
-      embed2.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-      embed2.add_field(name="Total HP", value=f"{health1} {hearts}", inline = False)
-      embed2.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
-
-
-      base_info = discord.Embed(description="Intel will be shown, proceed?", color=yellow)
-
-      button_c = Button(label="✔", style=discord.ButtonStyle.green)
-      button_x = Button(label = "❌", style=discord.ButtonStyle.red)
-    
-      view = View()
-      view.add_item(button_c)
-      view.add_item(button_x)
-
-      
-
-      msg = await ctx.reply(embed=base_info, view=view)
-
-      async def button_c_c(interaction):
-        if interaction.user == ctx.author:
-          if member_data.tanks <= 0 and member_data.spy <=0:
-            await msg.delete()
-            await interaction.response.send_message(embed=embed2, ephemeral=True)
-          if member_data.tanks > 0 and member_data.spy <= 0:
-            await msg.delete()
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-          if member_data.tanks <= 0 and member_data.spy > 0:
-            await msg.delete()
-            await interaction.response.send_message(embed=embedsp, ephemeral=True)
-          if member_data.tanks > 0 and member_data.spy > 0:
-            await msg.delete()
-            await interaction.response.send_message(embed=embeds, ephemeral=True)
-        else:
-          await interaction.response.send_message("This option is not for you!", ephemeral=True)
-      async def button_x_c(interaction):
-        if interaction.user == ctx.author:
-          
-          await ctx.message.delete()
-          await msg.delete()
-        else:
-          await interaction.response.send_message("This option is not for you!", ephemeral=True)
+      await int.response.send_message(embed=embeds, ephemeral=True)
         
 
-      button_c.callback = button_c_c
-      button_x.callback = button_x_c
-
       
           
+
+
+
+
+
+
+    @app_commands.command(description="Owner only beta command") 
+    @commands.is_owner()
+    @commands.guild_only()
+    async def base_beta(self, int: discord.Interaction):
+      member_data = load_member_data(int.user.id)
+      member_data2 = load_member_data2(int.user.id)
+      health1 = member_data.soldiers * 1
+      health2 = member_data.soldiers * 1 + member_data.tanks * 10
+
+      if member_data.strikes < 0:
+        member_data.strikes = 0
+      if member_data.resources < 0:
+        member_data.resources = 0
+      #----
+
+      base_options = Select(min_values=1, max_values=6,placeholder="Choose factions to appear in your base!", options=[
+
+        discord.SelectOption(label="Protection", value="protection"),
+        discord.SelectOption(label="War Medals", value="wm"),
+        discord.SelectOption(label="Army", value="army"),
+        discord.SelectOption(label="Specials", value="specials"),
+        discord.SelectOption(label="Wealth", value="wealth"),
+        discord.SelectOption(label="Total HP", value="hp"),
+        
+      ])
+
+      bo = View(timeout=None)
+      bo.add_item(base_options)
+
+      embeds = discord.Embed(title=f"{int.user.display_name}'s Base", color=inv)
+      if member_data2.level <= 0:
+        required = "5"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required}' to level up")
+      if member_data2.level == 1:
+        required = "10"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required}' to level up") 
+        
+      if member_data2.level == 2:
+        required = "15"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required}' to level up")
+
+
+
+
+      embeds.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
+
+      confirmation = await int.response.send_message(embed = embeds, view=bo, ephemeral=True)
+
+      async def options(int):
+          if base_options.values[0] == "protection":
+            await int.response.edit_message(embed=embeds, view=bo)
+            embeds.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = True)
+            
+          elif base_options.values[0] == "wm":
+            embeds.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
+            
+          elif base_options.values[0] == "army":
+            embeds.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}\n{str(member_data.spy)} :detective:", inline = False)
+            
+          elif base_options.values[0] == "specials":
+            embeds.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}\n{member_data.scrap} {scrap}", inline = False)
+            
+          elif base_options.values[0] == "wealth":
+            embeds.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
+            
+          elif base_options.values[0] == "hp":
+            embeds.add_field(name="Total HP", value=f"{health2} {hearts}", inline = True)
+
+
+        
+      base_options.callback = options
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       
          
@@ -292,7 +344,7 @@ def load_member_data(member_ID):
     data = load_data()
 
     if member_ID not in data:
-        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
     return data[member_ID]
 
@@ -302,6 +354,31 @@ def save_member_data(member_ID, member_data):
     data[member_ID] = member_data
 
     with open(data_filename, "wb") as file:
+        pickle.dump(data, file)
+
+
+
+def load_data2():
+        if os.path.isfile(data_filename2):
+            with open(data_filename2, "rb") as file:
+                return pickle.load(file)
+        else:
+            return dict()
+
+def load_member_data2(member_ID):
+    data = load_data2()
+
+    if member_ID not in data:
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+    return data[member_ID]
+
+def save_member_data2(member_ID, member_data2):
+    data = load_data2()
+
+    data[member_ID] = member_data2
+
+    with open(data_filename2, "wb") as file:
         pickle.dump(data, file)
 
 
