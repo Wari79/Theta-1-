@@ -78,30 +78,30 @@ class info(commands.Cog):
 
       
       #Page 2: Base
-      p2 = discord.Embed(title="Your base, your root", description=f"> The base is the core of your adventure; everything you gain in the game will have an affect on your journey and your base, either positively or negatively. Your base contains  important sections;\n1) **Protection**\n2) **Army**\n3) **Specials**\n4) **Wealth**\n-\n> You may check your base using `/base`", color = red) 
+      p2 = discord.Embed(title="Your base, your root", description=f"> The base is the core of your adventure; everything you gain in the game will have an affect on your journey and your base, either positively or negatively. Your base contains  important sections;\n1) **Protection**\n2) **Army**\n3) **Specials**\n4) **Wealth**\n-\n> You may check your base using </base:1053767446210822264>", color = red) 
 
       p2.set_image(url=base)
 
       
       #Page 3: Protection
-      p3 = discord.Embed(title="Proection", description=f"> Protection comes first, and by that we mean shields and walls\n-\n> **Wall** {wall} is an obtainable item that may be constructed with `{prefix}construct`, and its sole purpose is to guard you from an approaching attack.\n-\n> **Stike** {strike} is an available construction that may be built with `{prefix}construct`, and its main purpose is to function as a sort of ticket to an attack, but they do not cause any harm to enemy's base or troops. __**You need a strike to perform an attack**__", color = red)
+      p3 = discord.Embed(title="Proection", description=f"> Protection comes first, and wall will help you with that\n-\n> **Wall** {wall} is a constructable item and its sole purpose is to guard you from an approaching attack, use </construct:1058130084638236773> to make one!.\n-\n> **Stike** {strike} is an available construction that can be built with </construct:1058130084638236773>, and its main purpose is to function as a sort of ticket to an attack, but they do not cause any harm to enemy's base or troops. __**You need a strike to perform an attack**__", color = red)
 
       p3.set_image(url=walls)
       
       
       #Page 4: Army 1
-      p4 = discord.Embed(title="Army P1/2", description=f"> Army in Theta mainly focus on two great factors; **Soldiers {sold}** and **tanks {tank}**. A **soldier** is worth `1 hp` while a **tank** is worth `10 hp`.\n-\nYou can recruit **soldiers** using `{prefix}recruit` and you can construct a **tank** using `{prefix}construct`",color = red)
+      p4 = discord.Embed(title="Army P1/2", description=f"> Army in Theta mainly focus on two great factors; **Soldiers {sold}** and **tanks {tank}**. A **soldier** is worth `1 hp` while a **tank** is worth `10 hp`.\n-\nYou can recruit **soldiers** using </recruit:1056928026421629008> and you can construct a **tank** using </construct:1058130084638236773>",color = red)
 
       p4.set_image(url=tank3)
 
       
       #Page 5: Army 2
-      p5 = discord.Embed(title="Army P2/2", description = f"> **Spies {spy}** observe other commanders' bases primarily. They fully tell you of what the other commander have acquired in their base. You can construct a spy using `{prefix}construct`\n-\n> You may spy another commander using `{prefix}spy @member/id`", color = red)
+      p5 = discord.Embed(title="Army P2/2", description = f"> **Spies {spy}** observe other commanders' bases primarily. They fully tell you of what the other commander have acquired in their base. You can construct a spy using </construct:1058130084638236773>\n-\n> You may spy another commander using `{prefix}spy @member/id`", color = red)
       p5.set_image(url=spies)
       
       
 
-      p6 = discord.Embed(title="Specials", description=f"> Special weapons and gadgets are available to make you more powerful.\n-\n> **Combat Aircraft {ca}**, combat aircraft is a very strong weapon that provides air strikes that deals a total of ` 1000 hp ` damage to enemy's base, they can be constructed using `{prefix}construct`.\n-\n> **Scrap {scrap}** are materials that are used to construct combat aircrafts. Scraps can be constructed using `{prefix}construct`.\n-\n> **Crates {crate}** are loot-like boxes that contain sets of goods, they can be crafted with war medals.\n-\n> **War medals {medal}** can be obtained after every successful war commanders initiate, they are also visible in your base.\n-\nTo use air strikes on a member, use `{prefix}strike @member/id`\nTo open a crate use `{prefix}open crate`", color=red)
+      p6 = discord.Embed(title="Specials", description=f"> Special weapons and gadgets are available to make you more powerful.\n-\n> **Combat Aircraft {ca}**, combat aircraft is a very strong weapon that provides air strikes that deals a total of ` 1000 hp ` damage to enemy's base, they can be constructed using </construct:1058130084638236773>.\n-\n> **Scrap {scrap}** are materials that are used to construct combat aircrafts. Scraps can be constructed using </construct:1058130084638236773>.\n-\n> **Crates {crate}** are loot-like boxes that contain sets of goods, they can be crafted with war medals.\n-\n> **War medals {medal}** can be obtained after every successful war commanders initiate, they are also visible in your base.\n-\nTo use air strikes on a member, use `{prefix}strike @member/id`\nTo open a crate use `{prefix}open crate`", color=red)
       p6.set_image(url=air)
 
       
@@ -207,6 +207,14 @@ class info(commands.Cog):
       if member_data2.level == 2:
         required = "15"
         embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up") 
+
+      if member_data2.level == 3:
+        required = "25"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
+
+      if member_data2.level == 4:
+        required = "35"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
         
       
 
@@ -217,117 +225,8 @@ class info(commands.Cog):
       
       
       await int.response.send_message(embed=embeds, ephemeral=True)
-        
-
       
-          
-
-
-
-
-
-
-    @app_commands.command(description="Owner only beta command") 
-    @commands.is_owner()
-    @commands.guild_only()
-    async def base_beta(self, int: discord.Interaction):
-      member_data = load_member_data(int.user.id)
-      member_data2 = load_member_data2(int.user.id)
-      health1 = member_data.soldiers * 1
-      health2 = member_data.soldiers * 1 + member_data.tanks * 10
-
-      if member_data.strikes < 0:
-        member_data.strikes = 0
-      if member_data.resources < 0:
-        member_data.resources = 0
-      #----
-
-      base_options = Select(min_values=1, max_values=6,placeholder="Choose factions to appear in your base!", options=[
-
-        discord.SelectOption(label="Protection", value="protection"),
-        discord.SelectOption(label="War Medals", value="wm"),
-        discord.SelectOption(label="Army", value="army"),
-        discord.SelectOption(label="Specials", value="specials"),
-        discord.SelectOption(label="Wealth", value="wealth"),
-        discord.SelectOption(label="Total HP", value="hp"),
         
-      ])
-
-      bo = View(timeout=None)
-      bo.add_item(base_options)
-
-      embeds = discord.Embed(title=f"{int.user.display_name}'s Base", color=inv)
-      if member_data2.level <= 0:
-        required = "5"
-        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required}' to level up")
-      if member_data2.level == 1:
-        required = "10"
-        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required}' to level up") 
-        
-      if member_data2.level == 2:
-        required = "15"
-        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required}' to level up")
-
-
-
-
-      embeds.set_thumbnail(url="https://media.discordapp.net/attachments/814828851724943361/995035645053513829/ezgif.com-gif-maker.jpg")
-
-      confirmation = await int.response.send_message(embed = embeds, view=bo, ephemeral=True)
-
-      async def options(int):
-          if base_options.values[0] == "protection":
-            await int.response.edit_message(embed=embeds, view=bo)
-            embeds.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = True)
-            
-          elif base_options.values[0] == "wm":
-            embeds.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
-            
-          elif base_options.values[0] == "army":
-            embeds.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}\n{str(member_data.spy)} :detective:", inline = False)
-            
-          elif base_options.values[0] == "specials":
-            embeds.add_field(name="Specials", value=f"{member_data.ca} {ca}\n{member_data.crate} {crate}\n{member_data.scrap} {scrap}", inline = False)
-            
-          elif base_options.values[0] == "wealth":
-            embeds.add_field(name="Wealth", value=f"{str(member_data.resources)} {res}", inline = False)
-            
-          elif base_options.values[0] == "hp":
-            embeds.add_field(name="Total HP", value=f"{health2} {hearts}", inline = True)
-
-
-        
-      base_options.callback = options
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-         
-        
-
-          
-     
 
 
 async def setup(client):

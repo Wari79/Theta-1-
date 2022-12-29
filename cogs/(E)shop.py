@@ -682,7 +682,7 @@ class shop(commands.Cog):
 
 
 
-    @commands.command(aliases = ["cons"])
+    @commands.hybrid_command(description="Construct a weapon to aid your base!",aliases = ["cons"])
     @commands.guild_only()
     @cooldown(1, per_sec=35, type=commands.BucketType.user)
     async def construct(self, ctx):

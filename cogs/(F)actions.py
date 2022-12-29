@@ -552,7 +552,7 @@ class actions(commands.Cog):
   
     @commands.command()
     @commands.guild_only()
-    @cooldown(1, per_sec=45, type=commands.BucketType.user)
+    @cooldown(1, per_sec=15, type=commands.BucketType.user)
     async def spy(self, ctx, commander:discord.Member):
       member_data2 = load_member_data(ctx.author.id)
       if member_data2.spy <= 0:
@@ -722,10 +722,38 @@ class actions(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def trade(self, ctx, member:discord.Member, trader_op, trader_oi, user_op, user_oi):
+      options = ["soldiers", "soldier", "resource", "resources", "tank", "tanks", "spy", "rspy", "wall", "walls", "strike", "strikes", "crate", "crates", "ca", "Ca"]
+
+      if not trader_op[0].isnumeric():
+        invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{trader_op}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+        await ctx.reply(embed=invamount)
+        return
+
+      if trader_oi not in options:
+        inv = discord.Embed(title="Invalid Trader Option", description="Your options to trade are: (soldiers, resources, tanks, spy, walls, strikes, crates, ca)", color=red)
+        await ctx.reply(embed=inv)
+        return
+
+      if not user_op[0].isnumeric():
+        invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{user_op}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+        await ctx.reply(embed=invamount)
+        return
+      
+      if user_oi not in options:
+        inv = discord.Embed(title="Invalid Request Option", description="Your requested options to trade are: (soldiers, resources, tanks, spy, walls, strikes, crates, ca)", color=red)
+        await ctx.reply(embed=inv)
+        return
+      
       if member == ctx.author:
         error1 = discord.Embed(description="Apologies!! we cannot initiate the trade on the same commander, mention seomone else instead!", color=0xFF0000)
         await ctx.reply(embed=error1)
         return
+
+
+      
+
+
+        
       if trader_oi == "soldiers" or trader_oi =="soldier":
         trader_oemoji = sold
       if trader_oi == "tanks" or trader_oi =="tank":
@@ -765,8 +793,8 @@ class actions(commands.Cog):
         
       
       
-      conf1 = discord.Embed(title=f"{ctx.author.name}, please confirm the trade", description=f"**Your offer:\n{trader_op} {trader_oemoji}\n-\nFor {member.name}'s:\n {user_op} {user_oemoji}**", color=yellow)
-      conf2 = await ctx.reply(embed=conf1)
+      conf1 = discord.Embed(title=f"Confirming trade for Trader 1", description=f"> **Are you sure you want to trade your** `{trader_op}` {trader_oemoji}\n-\n> **To recieve {member.name}'s**: `{user_op}` {user_oemoji}", color=yellow)
+      conf2 = await ctx.reply(f"{ctx.author.mention}",embed=conf1)
       await conf2.add_reaction("✅")
       await conf2.add_reaction("❌")
 
@@ -778,10 +806,10 @@ class actions(commands.Cog):
       while True:
         if str(reaction) == "✅":
           await conf2.clear_reactions()
-          conf3 = discord.Embed(title=f"{member.name}, please confirm the trade", description=f"**{ctx.author.name} offers:\n{trader_op} {trader_oemoji}\n-\nFor your:\n{user_op} {user_oemoji}**", color=yellow)
+          conf3 = discord.Embed(title=f"Do you accept this offer?", description=f"> **{ctx.author.mention} is offering**:\n`{trader_op}` {trader_oemoji}\n-\n> **To recieve your:**\n`{user_op}` {user_oemoji}**", color=yellow)
 
           
-          await conf2.edit(embed=conf3)
+          await conf2.edit(content=f"{member.mention}",embed=conf3)
           await conf2.add_reaction("✅")
           await conf2.add_reaction("❌")
           def check(reaction, user):
@@ -1607,7 +1635,7 @@ class actions(commands.Cog):
         else:
           
           
-          gain = 35 * int(amount)
+          gain = 100 * int(amount)
 
           conf = discord.Embed(description=f"Commander {ctx.author.name}, are you sure you want to sell {amount} {item} for {int(gain)} {res}?", color=green)
 
@@ -1655,7 +1683,7 @@ class actions(commands.Cog):
           await ctx.reply(embed=error)
           return
         else:
-          gain2 = 60 * int(amount)
+          gain2 = 142 * int(amount)
           conf3 = discord.Embed(description=f"Commander {ctx.author.name}, are you sure you want to sell {amount} {item} for {int(gain2)} {res}?", color=green)
 
           conf2 = await ctx.reply(embed=conf3)
@@ -1698,7 +1726,7 @@ class actions(commands.Cog):
           await ctx.reply(embed=error)
           return
         else:
-          gain3 = 350 * int(amount)
+          gain3 = 500 * int(amount)
           conf4 = discord.Embed(description=f"Commander {ctx.author.name}, are you sure you want to sell {amount} {item} for {int(gain3)} {res}?", color=green)
 
           conf2 = await ctx.reply(embed=conf4)
@@ -1738,7 +1766,7 @@ class actions(commands.Cog):
           await ctx.reply(embed=error)
           return
         else:
-          gain4 = 475 * int(amount)
+          gain4 = 575 * int(amount)
           conf5 = discord.Embed(description=f"Commander {ctx.author.name}, are you sure you want to sell {amount} {item} for {int(gain4)} {res}?", color=green)
 
           conf2 = await ctx.reply(embed=conf5)

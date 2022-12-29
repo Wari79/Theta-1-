@@ -16,7 +16,7 @@ from discord.ext.commands import (
     CommandNotFound,
     MissingRequiredArgument,
 )
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv
 data_filename2 = "levels/levels"
 data_filename = "currency files/data"
 
@@ -44,12 +44,20 @@ class levels(commands.Cog):
     def __init__(self, client): 
         self.client = client
 
-    @commands.command()
-    async def xp_give(self, ctx, amount):
-      member_data2 = load_member_data2(ctx.author.id)
+    @commands.hybrid_command(name = "xp_giving", description="Give xp to desired member, if not, then author is selected by default")
+    @commands.is_owner()
+    async def give_xp(self, ctx, amount, member:discord.Member=None):
+      if member == None:
+        member = ctx.author
+      if not amount[0].isnumeric():
+        invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
+        await ctx.reply(embed=invamount)
+        return
+      member_data2 = load_member_data2(member.id)
       member_data2.xp += int(amount)
-      await ctx.send("done")
-      save_member_data2(ctx.author.id, member_data2)
+      done = discord.Embed(description=f"Gave `{amount}` XP to {member.mention}", color=inv)
+      await ctx.reply(embed=done)
+      save_member_data2(member.id, member_data2)
       
 
     @commands.command() 

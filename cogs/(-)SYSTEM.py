@@ -13,7 +13,8 @@ from discord.ext.commands import (
 )
 import json
 import time
-from emojis import red, green, yellow
+from emojis import red, green, yellow, inv
+
 
 class errors(commands.Cog):
     def __init__(self, client):
@@ -78,11 +79,8 @@ class errors(commands.Cog):
         for channel in guild.text_channels:
             if channel.permissions_for(guild.me).send_messages:
                 embed = discord.Embed(title=f"Greetins '{guild.name}'!", color=red)
-                embed.add_field(
-                    name="Configuration :arrow_heading_down:",
-                    value=f"Hello there and thank you guys for inviting me in! my default prefix is `>` and say `>help` to get a list of commands that you can use! **You can change my prefix by saying `>change_prefix [prefix]` if you wish to**",
-                    inline=False
-                )
+                embed.add_field(name="Configuration :arrow_heading_down:",value=f"Hello there and thank you guys for inviting me in! my default prefix is `>` and say `>help` to get a list of commands that you can use! **You can change my prefix by saying `>change_prefix [prefix]` if you wish to**",inline=False)
+                embed.set_thumbnail(url=guild.icon)
 
                 with open("prefix.json", "r") as f:
                     prefixes = json.load(f)
@@ -90,9 +88,7 @@ class errors(commands.Cog):
                 with open("prefix.json", "w") as f:
                     json.dump(prefixes, f, indent=4)
 
-            embed.set_thumbnail(
-                url=guild.icon
-            )
+                
             await channel.send(embed=embed)
 
             join = discord.Embed(title="Server Report On Join", description=f"`Guild Name`: {guild.name} ({guild.id})\n`Owner`: {guild.owner} ({guild.owner.id})\n`Member Count`: {guild.member_count}", color=green)
@@ -144,6 +140,10 @@ class errors(commands.Cog):
     async def on_command_error(self, ctx, error):
         
         owner = self.client.get_user(798280308071596063)
+
+        default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+
+        
         
 
         if isinstance(error, commands.NotOwner):
@@ -151,13 +151,15 @@ class errors(commands.Cog):
             await ctx.reply(embed=staff)
 
           
-        elif isinstance(error, MissingPermissions):
-          perms = discord.Embed(title="Missing Permissions", description=f"Hey there **{ctx.author.name}**, I'm sorry but i can't let you perform this command as you need ``{error.missing_perms}`` permission for it!", color=red)    
-          await ctx.reply(embed=perms)
+        # elif isinstance(error, MissingPermissions):
+        #   perms = discord.Embed(title="Missing Permissions", description=f"Hey there **{ctx.author.name}**, I'm sorry but i can't let you perform this command as you need ``{error.missing_perms}`` permission for it!", color=red)    
+        #   await ctx.reply(embed=perms)
+          
         
         elif isinstance(error, MissingRequiredArgument):
-          arg = discord.Embed(title="Missing Argument", description=f"Hey there **{ctx.author.name}**, You missed an __argument__ while trying to perform this command, you need to mention ``{error.param.name}``", color=red)
+          arg = discord.Embed(title="Missing Argument", description=f"Hey there **{ctx.author.name}**, You missed an __argument__ while trying to perform this command, you need to mention ``{error.param.name}``, refer back to **theta's help guide** to discover the needed arguments!", color=red)
           await ctx.reply(embed=arg)
+          ctx.command.reset_cooldown(ctx)
 
           
         elif isinstance(error, CommandNotFound):
@@ -172,23 +174,42 @@ class errors(commands.Cog):
             # cool = discord.Embed(description='**Action failed**, this action can’t be done at the moment, it’s estimated that this action can be done <t:{}:R>.'.format(int(time.time() + error.retry_after)), color=red)
             em = discord.Embed(title="Cooldown",description=f"**due to cooldown, you can retry this command in** ` {self.better_time(cd)} `", color=red)
             await ctx.reply(embed=em)
+
+        elif isinstance(error, commands.MemberNotFound):
+          er = discord.Embed(description=f"**Invalid Member**, please mention a valid member inside of the server, ex. `@{owner}`", color=red)
+          await ctx.reply(embed=er)
+
+        elif isinstance(error, commands.DisabledCommand):
+          main = discord.Embed(title="Maintenance in prefix commands", description=f"Hey there {ctx.author.mention}!\n-\n> **We are on maintenance!**, which means that some commands will be offline/not working till we finish the maintenance process. If you're curious to check the maintenance status then don't forget to join us at [The Official Theta](https://discord.gg/82Jf7uEqDs) server!", color=yellow)
+          await ctx.reply(embed=main)
         
         
         
         else:
-            em = discord.Embed(
-                title=f"Error!",
-                description=f"If this error keeps occuring, please contact {owner} regarding the issue! thank you!",
-                color=0x0000,
-            )
-            em.add_field(
-                name="Terminal error :arrow_heading_down:",
-                value=f"``{str(error)}``",
-                inline=True,
-            )
-            await ctx.send(embed=em)
-            await ctx.message.add_reaction("❌")
+            error_message = discord.Embed(title=f"An Error Occured", description=f"> **This is a script error**, an issue ticket has been made for the __development team__ to fix this issue.\n-\n> As the issue is being resolved, please make sure you are using the correct arguments required for the command.\n-\nBest Regards,\nTheta's Develepmont Team", color=red)
+            # em.add_field(
+            #     name="Terminal error :arrow_heading_down:",
+            #     value=f"``{str(error)}``",
+            #     inline=True,
+            # )
+            await ctx.send(embed=error_message)
+            ctx.command.reset_cooldown(ctx)
+            try:
+              await ctx.message.add_reaction("⚠")
+            except:
+              pass
+
+            
+
+
+
+            system_error = discord.Embed(title=f"Script Error in '{ctx.guild.name}'", description=f"`{str(error)}`\n-\nCommand Executer: {ctx.author}({ctx.author.id})\nServer ID: {ctx.guild.id}\nServer Owner: {ctx.guild.owner}\nCommand Message: [Error here]({ctx.message.jump_url})", color=inv)
+
+            await default_log.send("<@&1047250525323808788>", embed=system_error)
+
             raise error
+          
+            
 
 #------------------------------------------------------------------------------------------------
 

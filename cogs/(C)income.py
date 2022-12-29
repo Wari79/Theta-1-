@@ -60,6 +60,8 @@ class income(commands.Cog):
     @commands.guild_only()
     @cooldown(1, per_sec=15, type=commands.BucketType.user)
     async def recruit(self, ctx):
+        
+        
       
         member_data = load_member_data(ctx.author.id)
       
@@ -82,6 +84,14 @@ class income(commands.Cog):
         if member_data.s < 150:
           member_data.s += 1
           save_member_data(ctx.author.id, member_data)
+
+        default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+
+        try:
+          log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just recruited `{option}` {sold}\n-\nFrom: {ctx.guild.name} server", color=green)
+          await default_log.send(embed=log)
+        except:
+          pass
         
 
       
@@ -163,6 +173,14 @@ class income(commands.Cog):
           if member_data.r < 150:
              member_data.r += 1
              save_member_data(ctx.author.id, member_data)
+
+          default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+
+          try:
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just catched `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            await default_log.send(embed=log)
+          except:
+            pass
           return
         else:
           await interaction.response.send_message("This option is not for you!", ephemeral=True)
@@ -192,7 +210,17 @@ class income(commands.Cog):
           if member_data.r < 150:
              member_data.r += 1
              save_member_data(ctx.author.id, member_data)
+
+          default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+
+          try:
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just catched `{bac}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            await default_log.send(embed=log)
+          except:
+            pass
           return
+
+          
         else:
           await interaction.response.send_message("This option is not for you!", ephemeral=True)
 
@@ -219,6 +247,14 @@ class income(commands.Cog):
           if member_data.r < 150:
              member_data.r += 1
              save_member_data(ctx.author.id, member_data)
+
+          default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+
+          try:
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just catched `{dec}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            await default_log.send(embed=log)
+          except:
+            pass
           return
         else:
           await interaction.response.send_message("This option is not for you!", ephemeral=True)
@@ -288,7 +324,7 @@ class income(commands.Cog):
             save_member_data(ctx.author.id, member_data)
 
           
-          fin = discord.Embed(description=f"Crate Contained:\n-\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}", color=green)
+          fin = discord.Embed(description=f"Crate Contained:\n-\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}", color=inv)
           await message.edit(embed=fin)
 
           #result
@@ -301,6 +337,14 @@ class income(commands.Cog):
 
           
           save_member_data(ctx.author.id, member_data)
+
+          default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+
+          try:
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just openned a {crate}\n> Containing:\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}\n-\nFrom: {ctx.guild.name} server", color=green)
+            await default_log.send(embed=log)
+          except:
+            pass
         
 
     

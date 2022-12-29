@@ -44,16 +44,5 @@ class moderation(commands.Cog):
 
 
 
-
-      
-    
-
-    @app_commands.command(description="Slash commands coming soon!") 
-    async def slash(self, int: discord.Interaction):
-      await int.response.send_message("Full slash commands coming soon!")
-
-
-
-
 async def setup(client):
     await client.add_cog(moderation(client)) 

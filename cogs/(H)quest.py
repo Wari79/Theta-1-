@@ -145,7 +145,7 @@ class quest(commands.Cog):
         member_data2.xp = 0
         save_member_data2(message.author.id, member_data2)
         lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`", color=green)
-        await message.channel.send(embed=lvl)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
         return
       else:
         pass
@@ -157,11 +157,38 @@ class quest(commands.Cog):
         member_data.resources += 250
         save_member_data2(message.author.id, member_data2)
         lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 250 {res}\n> 1 {wall}", color=green)
-        await message.channel.send(embed=lvl)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
         return
       else:
         pass
-        
+
+      if member_data2.xp >= 25 and member_data2.level <= 3:
+        member_data2.level += 1
+        member_data2.xp = 0
+        member_data.wall += 2
+        member_data.crate += 1
+        member_data.resources += 350
+        save_member_data2(message.author.id, member_data2)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 350 {res}\n> 2 {wall}\n> 1 {crate}", color=green)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
+        return
+      else:
+        pass
+
+
+      if member_data2.xp >= 35 and member_data2.level <= 4:
+        member_data2.level += 1
+        member_data2.xp = 0
+        member_data.wall += 3
+        member_data.crate += 1
+        member_data.resources += 450
+        member_data.strikes += 2
+        save_member_data2(message.author.id, member_data2)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 450 {res}\n> 3 {wall}\n> 1 {crate}\n> 2 {strikes}", color=green)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
+        return
+      else:
+        pass
 
 
 
@@ -234,7 +261,7 @@ class quest(commands.Cog):
             member_data.strikes += 2
             save_member_data(message.author.id, member_data)
             reward2 = discord.Embed(description=f"**Quest Completed**\n-\n> You recieved 2 {strike} for completing a quest.", color=green)
-            await message.author.send(embed=reward2)
+            await message.channel.send(f"{message.author.mention}", embed=reward2)
       else:
         pass
 
@@ -257,7 +284,7 @@ class quest(commands.Cog):
             member_data.wall += 2
             save_member_data(message.author.id, member_data)
             reward3 = discord.Embed(description=f"**Quest Completed**\n-\n> You recieved 2 {wall} & 2 {strike} for completing a quest.", color=green)
-            await message.author.send(embed=reward3)
+            await message.channel.send(f"{message.author.mention}", embed=reward3)
       else:
         pass
       if member_data.cfca >= 3:
@@ -279,7 +306,7 @@ class quest(commands.Cog):
             member_data.resources += 1750
             save_member_data(message.author.id, member_data)
             reward2 = discord.Embed(description=f"**Quest Completed**\n-\n> You recieved 1750 {res} for completing a quest.", color=green)
-            await message.author.send(embed=reward2)
+            await message.channel.send(f"{message.author.mention}", embed=reward2)
 
       
 

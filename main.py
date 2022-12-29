@@ -78,6 +78,8 @@ async def on_ready():
     await client.load_extension("cogs.(C)income")
     await client.load_extension("cogs.(I)levels")
     await client.load_extension("cogs.(Extra)ahmed")
+    await client.load_extension("cogs.logging")
+    await client.load_extension("cogs.maintenance")
     
     
 
@@ -97,6 +99,8 @@ async def r(ctx):
   await client.reload_extension("cogs.(C)income")
   await client.reload_extension("cogs.(I)levels")
   await client.reload_extension("cogs.(Extra)ahmed")
+  await client.reload_extension("cogs.logging")
+  await client.reload_extension("cogs.maintenance")
   await asyncio.sleep(2)
   third = discord.Embed(description="Refreshed **10** cog files", color=green)
   await second.edit(embed=third)
@@ -107,6 +111,7 @@ async def sync(ctx):
   await tree.sync()
   sync_made = discord.Embed(description="Successfully synced slash commands!", color=green)
   await ctx.reply(embed=sync_made)
+
 
 # @client.command()
 # @commands.is_owner()
