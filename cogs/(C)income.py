@@ -177,7 +177,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just catched `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
             await default_log.send(embed=log)
           except:
             pass
@@ -214,7 +214,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just catched `{bac}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{bac}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
             await default_log.send(embed=log)
           except:
             pass
@@ -251,7 +251,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just catched `{dec}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{dec}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
             await default_log.send(embed=log)
           except:
             pass
