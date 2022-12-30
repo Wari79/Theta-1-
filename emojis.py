@@ -20,6 +20,7 @@ red = 0xCF3D3D
 yellow = 0xFFD700
 inv = 0x2F3136
 ded = "https://media.discordapp.net/attachments/1042487672217796631/1046741502954577961/dead-removebg-preview.png"
+loading = "<a:loading:1058423343189082153>"
 
 ar = "<a:ar:1049380618447892530>"
 

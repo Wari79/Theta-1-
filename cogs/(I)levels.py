@@ -67,6 +67,7 @@ class levels(commands.Cog):
       await ctx.reply(embed=xp_status)
 
     @commands.command()
+    @commands.is_owner()
     async def res(self, ctx, member:discord.Member=None):
       if member == None:
         member = ctx.author

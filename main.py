@@ -26,7 +26,7 @@ from discord.ext.commands import (
 )
 import time
 
-from emojis import yellow, red, green
+from emojis import yellow, red, green, inv, loading
 from discord import app_commands
 
 
@@ -87,7 +87,7 @@ async def on_ready():
 @client.command(aliases = ["refresh"])
 @commands.is_owner()
 async def r(ctx):
-  first = discord.Embed(description="On it..", color=yellow)
+  first = discord.Embed(description=f"On it {loading}", color=yellow)
   second = await ctx.reply(embed=first)
   await client.reload_extension("cogs.(-)staff")
   await client.reload_extension("cogs.(-)SYSTEM")
@@ -108,9 +108,12 @@ async def r(ctx):
 @client.command()
 @commands.is_owner()
 async def sync(ctx):
+  on_it = discord.Embed(description=f"On it {loading}", color=red)
+  done = await ctx.reply(embed=on_it)
   await tree.sync()
-  sync_made = discord.Embed(description="Successfully synced slash commands!", color=green)
-  await ctx.reply(embed=sync_made)
+  await asyncio.sleep(3)
+  sync_made = discord.Embed(description="**Successfully synced slash commands!**", color=green)
+  await done.edit(embed=sync_made)
 
 
 # @client.command()

@@ -219,13 +219,7 @@ class staff(commands.Cog):
         await ctx.send(embed=restart, delete_after=8)
         restart_bot()
 
-    @commands.command(description="Test command")
-    @commands.is_owner()
-    async def embed(self, ctx):
-      test_embed1 = discord.Embed(description="**0x2F3136**", color=0x2F3136)
-      test_embed2 = discord.Embed(description="**0x36393E**", color=0x36393E)
-      await ctx.send(embed=test_embed1)
-      await ctx.send(embed=test_embed2)
+    
 
       
           
@@ -302,7 +296,7 @@ class staff(commands.Cog):
     
 
 
-    @commands.command()
+    @commands.command(aliases = ["emojis"])
     async def emoji(self, ctx):
       if len(ctx.guild.emojis) <= 0:
         non = discord.Embed(description="No available emojis are active in this server", color=inv)
@@ -316,8 +310,8 @@ class staff(commands.Cog):
 
       
         
-        embed1 = discord.Embed(title="Emojis",description=emoji_string, color=0x00C4B8)
-        embed2 = discord.Embed(title="Emojis",description=emoji_string2, color=0x00C4B8)
+        embed1 = discord.Embed(title="Emojis",description=emoji_string, color=inv)
+        embed2 = discord.Embed(title="Emojis",description=emoji_string2, color=inv)
         
 
         lists = [embed1, embed2]

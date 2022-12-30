@@ -6,6 +6,7 @@ import asyncio
 from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow
 import json
 from discord.ui import *
+from discord import app_commands
 
 
 
@@ -550,30 +551,18 @@ class actions(commands.Cog):
 
 
   
-    @commands.command()
+    @app_commands.command(description="spy on a member, choose wisely!")
+    @app_commands.describe(commander="Choose a commander that will be spied on!")
     @commands.guild_only()
-    @cooldown(1, per_sec=15, type=commands.BucketType.user)
-    async def spy(self, ctx, commander:discord.Member):
-      member_data2 = load_member_data(ctx.author.id)
+    async def spy(self, interaction:discord.Interaction, commander:discord.Member):
+      member_data2 = load_member_data(interaction.user.id)
       if member_data2.spy <= 0:
             fail = discord.Embed(title="ERROR", description="**Action failed**, no :detective: available.", color=0xFFD700)
             await ctx.reply(embed=fail)
-            ctx.command.reset_cooldown(ctx)
+            interaction.command.reset_cooldown(ctx)
       if member_data2.spy > 0:
-        button_c = Button(label="✔", style=discord.ButtonStyle.green)
-        button_x = Button(label = "❌", style=discord.ButtonStyle.red)
-    
-        view = View()
-        view.add_item(button_c)
-        view.add_item(button_x)
-        confirmation = discord.Embed(description=f"Commander, are you sure that you want to spy on {commander.name}'s base?", color=green)
-        message = await ctx.reply(embed=confirmation, view=view)
-        
-        async def button_c_c(interaction):
-          if interaction.user == ctx.author:
-            await ctx.message.delete()
             member_data2.spy -= 1
-            save_member_data(ctx.author.id, member_data2)
+            save_member_data(interaction.user.id, member_data2)
             member_data = load_member_data(commander.id)
             health1 = member_data.soldiers * 1
             health2 = member_data.soldiers * 1 + member_data.tanks * 10
@@ -591,21 +580,8 @@ class actions(commands.Cog):
   
               
             await interaction.response.send_message(embed=embeds, ephemeral=True)
-            await message.delete()
             return
-          else:
-            await interaction.response.send_message("This option is not for you!", ephemeral=True)
-        async def button_x_c(interaction):
-          if interaction.user == ctx.author:
-            await ctx.message.delete()
-            await message.delete()
-            await interaction.response.send_message("Cancelled spy operation :white_check_mark:", ephemeral=True)
-            ctx.command.reset_cooldown(ctx)
-            return
-          else:
-            await interaction.response.send_message("This option is not for you!", ephemeral=True)
-        button_c.callback = button_c_c
-        button_x.callback = button_x_c
+          
           
       
 

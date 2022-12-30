@@ -6,11 +6,11 @@ import asyncio
 import random
 from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, green, red, yellow, inv
 
-
 class maintenance(commands.Cog):
     def __init__(self, client): 
         self.client = client
 
+    
 
 
     @commands.command()
@@ -32,6 +32,15 @@ class maintenance(commands.Cog):
       trade = self.client.get_command("trade")
       attack = self.client.get_command("attack")
       construct = self.client.get_command("construct")
+
+      
+      
+      # for member in self.client.get_all_members():
+      #   member_data = load_member_data(member.id)
+      #   member_data.maint += 1
+
+      #   save_member_data(member.id, member_data)
+        
 
 
 
@@ -91,3 +100,4 @@ class maintenance(commands.Cog):
 
 async def setup(client): 
   await client.add_cog(maintenance(client)) 
+
