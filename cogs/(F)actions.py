@@ -74,14 +74,16 @@ class actions(commands.Cog):
                 
                 await ctx.reply(embed=striked)
 
-                informer = discord.Embed(title="Emergency!", description=f"Commander **{ctx.author.name}**, Just striked your base with a strike. You now have {member_data2.wall} {wall} left", color=red)
-                await victim.send(embed=informer)
+                
                 ctx.command.reset_cooldown(ctx)
                 #results
                 member_data.strikes -= 1
                 member_data2.wall -= 1
+                
                 save_member_data(ctx.author.id, member_data)
                 save_member_data(victim.id, member_data2)
+                informer = discord.Embed(title="Emergency!", description=f"Commander **{ctx.author.name}**, Just striked your base with a strike. You now have {member_data2.wall} {wall} left", color=red)
+                await victim.send(embed=informer)
               else:  
 
                 confirm_it = discord.Embed(title="Warning", description=f"Continuing this command will subtract 1 {strike} from your base, are you sure you will continue?", color=yellow)
@@ -558,8 +560,7 @@ class actions(commands.Cog):
       member_data2 = load_member_data(interaction.user.id)
       if member_data2.spy <= 0:
             fail = discord.Embed(title="ERROR", description="**Action failed**, no :detective: available.", color=0xFFD700)
-            await ctx.reply(embed=fail)
-            interaction.command.reset_cooldown(ctx)
+            await interaction.response.send_message(embed=fail, ephemeral=True)
       if member_data2.spy > 0:
             member_data2.spy -= 1
             save_member_data(interaction.user.id, member_data2)

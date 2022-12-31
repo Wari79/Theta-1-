@@ -4,7 +4,7 @@ import os
 import pickle
 import asyncio
 import json
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv, wall_level_1, wall_level_2, wall_level_3, wall_level_1_empty, wall_level_2_empty, wall_level_3_empty
 from discord.ui import *
 
 from discord import app_commands
@@ -84,19 +84,19 @@ class info(commands.Cog):
 
       
       #Page 3: Protection
-      p3 = discord.Embed(title="Proection", description=f"> Protection comes first, and wall will help you with that\n-\n> **Wall** {wall} is a constructable item and its sole purpose is to guard you from an approaching attack, use </construct:1058130084638236773> to make one!.\n-\n> **Stike** {strike} is an available construction that can be built with </construct:1058130084638236773>, and its main purpose is to function as a sort of ticket to an attack, but they do not cause any harm to enemy's base or troops. __**You need a strike to perform an attack**__", color = red)
+      p3 = discord.Embed(title="Proection", description=f"> Protection comes first, and our walls will help you with that\n-\n> **Wall** {wall} is a constructable item and its sole purpose is to guard you from an approaching attack, a wall can be upgraded to 3 levels only!, use </construct:1058130084638236773> to make one!\n-\n> **Strike** {strike} is an available construction that can be built with </construct:1058130084638236773>, and its main purpose is to function as a sort of ticket to an attack, but they do not cause any harm to enemy's base or troops. __**You need a strike to perform an attack**__", color = red)
 
       p3.set_image(url=walls)
       
       
       #Page 4: Army 1
-      p4 = discord.Embed(title="Army P1/2", description=f"> Army in Theta mainly focus on two great factors; **Soldiers {sold}** and **tanks {tank}**. A **soldier** is worth `1 hp` while a **tank** is worth `10 hp`.\n-\nYou can recruit **soldiers** using </recruit:1056928026421629008> and you can construct a **tank** using </construct:1058130084638236773>",color = red)
+      p4 = discord.Embed(title="Army P1/2", description=f"> Army in Theta mainly focus on two great factors; **Soldiers {sold}** and **tanks {tank}**. A **soldier** has `1 hp` while a **tank** has `10 hp`.\n-\nYou can recruit **soldiers** using </recruit:1056928026421629008> and you can construct a **tank** using </construct:1058130084638236773>",color = red)
 
       p4.set_image(url=tank3)
 
       
       #Page 5: Army 2
-      p5 = discord.Embed(title="Army P2/2", description = f"> **Spies {spy}** observe other commanders' bases primarily. They fully tell you of what the other commander have acquired in their base. You can construct a spy using </construct:1058130084638236773>\n-\n> You may spy another commander using `{prefix}spy @member/id`", color = red)
+      p5 = discord.Embed(title="Army P2/2", description = f"> **Spies {spy}** observe other commanders' bases primarily. They fully tell you of what the other commander have acquired in their base. You can construct a spy using </construct:1058130084638236773>\n-\n> You may spy another commander using </spy:1058418170421071972>", color = red)
       p5.set_image(url=spies)
       
       
@@ -107,7 +107,7 @@ class info(commands.Cog):
       
       
 
-      p7 = discord.Embed(title="Wealth", description=f"> **Resources {res}** are the most important factor in this game, they are the 'currency' of the game, they can be obtained by `{prefix}expedition` and are used in constructions. You can gain resources by invading other commanders as well on completing quests", color = red)
+      p7 = discord.Embed(title="Wealth", description=f"> **Resources {res}** are the most important factor in this game, they are the 'currency' of the game, they can be obtained by </expedition:1056930030086799370> and are used in constructions. You can gain resources by invading other commanders as well on completing quests", color = red)
 
       p8 = discord.Embed(title="Attacking", description=f"> To declare an **attack** and start war, use `{prefix}attack @member/id` and mention the commander you want to attack, but you have to play it smart and choose the right moment to strike a blow.", color=red)
       p8.set_image(url=war)
@@ -186,10 +186,23 @@ class info(commands.Cog):
         member_data.strikes = 0
       if member_data.resources < 0:
         member_data.resources = 0
+       
+        
+        
       #----
-      embeds = discord.Embed(title=f"{int.user.display_name}'s Base", color=0x36393F) #18191C #0x36393F
+      embeds = discord.Embed(title=f"{int.user.display_name}'s Base", color=red) #18191C #0x36393F
+      if member_data.wall < 1:
+        embeds.add_field(name="Protection", value=f"{wall} {wall_level_1_empty}{wall_level_2_empty}{wall_level_3_empty}`level 0`\n{member_data.strikes} {strike}", inline = True)
+        
+      if member_data.wall == 1:
+        embeds.add_field(name="Protection", value=f"{wall} {wall_level_1}{wall_level_2_empty}{wall_level_3_empty} `level 1`\n{member_data.strikes} {strike}", inline = True)
+
+      if member_data.wall == 2:
+        embeds.add_field(name="Protection", value=f"{wall} {wall_level_1}{wall_level_2}{wall_level_3_empty} `level 2`\n{member_data.strikes} {strike}", inline = True)
+
+      if member_data.wall >= 3:
+        embeds.add_field(name="Protection", value=f"{wall} {wall_level_1}{wall_level_2}{wall_level_3} `Max`\n{member_data.strikes} {strike}", inline = True)
       
-      embeds.add_field(name="Protection", value=f"{str(member_data.wall)} {wall}\n{member_data.strikes} {strike}", inline = True)
       embeds.add_field(name="War Medals", value=f"{member_data.medals} {medal}", inline=True)
       
       embeds.add_field(name="Army", value=f"{str(member_data.soldiers)} {sold}\n{str(member_data.tanks)} {tank}\n{str(member_data.spy)} :detective:", inline = False)
@@ -225,6 +238,9 @@ class info(commands.Cog):
       
       
       await int.response.send_message(embed=embeds, ephemeral=True)
+      default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+      used = discord.Embed(description=f"{int.user.name}#{int.user.discriminator} just used </base:1053767446210822264> in {int.guild.name}")
+      await default_log.send(embed=used)
       
         
 

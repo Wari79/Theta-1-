@@ -186,7 +186,7 @@ class errors(commands.Cog):
         
         
         else:
-            error_message = discord.Embed(title=f"An Error Occured", description=f"> **This is a script error**, an issue ticket has been made for the __development team__ to fix this issue.\n-\n> As the issue is being resolved, please make sure you are using the correct arguments required for the command.\n-\nBest Regards,\nTheta's Develepmont Team", color=red)
+            error_message = discord.Embed(title=f"An Error Occured", description=f"> **This is a script error**, an issue ticket has been made for the __development team__ to fix this issue.\n-\n> As the issue is being resolved, please make sure you are using the correct arguments required for the command.\n-\nBest Regards,\nTheta's Development Team", color=red)
             # em.add_field(
             #     name="Terminal error :arrow_heading_down:",
             #     value=f"``{str(error)}``",

@@ -87,7 +87,7 @@ async def on_ready():
 @client.command(aliases = ["refresh"])
 @commands.is_owner()
 async def r(ctx):
-  first = discord.Embed(description=f"On it {loading}", color=yellow)
+  first = discord.Embed(description=f"On it {loading}", color=red)
   second = await ctx.reply(embed=first)
   await client.reload_extension("cogs.(-)staff")
   await client.reload_extension("cogs.(-)SYSTEM")

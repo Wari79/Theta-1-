@@ -16,10 +16,10 @@ from googletrans import Translator
 import traceback
 import sys
 import time
-from emojis import suit, tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv
+from emojis import suit, tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv, loading2
 data_filename = "currency files/data"
 from discord import app_commands
-
+from discord.ui import *
 from PIL import Image, ImageFont, ImageDraw, ImageStat
 import textwrap
 from io import BytesIO
@@ -103,8 +103,8 @@ def create_welcome(user:discord.Member, user_avatar, join_pos):
 
         # status = str(user.activity[:10]) + "\n" + str(user.activity)[10]
 
-        text_color = 108, 247, 80
-        info_font = ImageFont.truetype("terminal.ttf", size=15)
+        text_color = 210, 43, 43 #108, 247, 80
+        info_font = ImageFont.truetype("terminal.ttf", size=16)
         welcome_font = ImageFont.truetype("terminal.ttf", size=20)
         name_font = ImageFont.truetype("terminal.ttf", size=30)
         ascii_font = ImageFont.truetype("terminal.ttf", size=3)
@@ -205,6 +205,41 @@ class staff(commands.Cog):
         self.client = client
         #discord.Colour.random()
 
+    # @commands.command()
+    # @commands.is_owner()
+    # async def announcement(self, ctx):
+    #   default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
+    #   await ctx.send("sending announcement to guilds")
+    #   for guild in self.client.guilds:
+    #     owner = guild.owner
+
+    #     server_link = Button(label="Theta's Official Server", url="https://discord.gg/82Jf7uEqDs")
+    #     view = View()
+    #     view.add_item(server_link)
+  
+          
+    #     ans = discord.Embed(title="Private Owner Message", description=f"I just realized i **DIDNT** add theta's invite link in the previous announcement :skull: , IM SO SORRY HERE U GO JUST CLICK THE BUTTON :sob:\n-\nStupid ham (Hamzy#0227)", color=red)
+          
+    #     try:
+          
+    #       await owner.send(embed=ans, view=view)
+ 
+    #     except discord.Forbidden:
+    #       error = discord.Embed(description=f"{owner.name}#{owner.discriminator} from {owner.guild.name} has dms turned off!")
+    #       await ctx.reply(embed=error)
+
+    @commands.command()
+    @commands.is_owner()
+    async def latest(self, ctx, status=None):
+      if status != "status":
+        did = discord.Embed(description="Did you mean `latest status` ?", color=inv)
+        await ctx.reply(embed=did)
+        return
+      await self.client.change_presence(status=discord.Status.do_not_disturb, activity=discord.Activity(type=discord.ActivityType.playing, name=f"with {len(self.client.guilds)} servers and {len(self.client.users)} members"))
+      done = discord.Embed(description="Refreshed bot's appearance", color=inv)
+      await ctx.reply(embed=done)
+        
+    
     
         
 
@@ -234,7 +269,11 @@ class staff(commands.Cog):
       
       og.add_field(name=f"`{prefix}refresh`", value="Refresh all cog files to save updates done to them", inline=False)
 
-      og.add_field(name=f"{prefix}emoji", value="Sends a full list of a double paged emoji string, id formatted and code formatted", inline=False)
+      og.add_field(name=f"`{prefix}emoji`", value="Sends a full list of a double paged emoji string, id formatted and code formatted", inline=False)
+
+      og.add_field(name=f"`{prefix}latest status`", value="Updates the bot's status/stats")
+
+
 
 
       
@@ -612,20 +651,21 @@ class staff(commands.Cog):
 
 
 
-    @commands.hybrid_command(description="Developer-only command that gives info about a member", aliases = ["id"])
-    @commands.is_owner()
+    @commands.hybrid_command(description="Identify a member with a cool format!", aliases = ["id"])
     async def identify(self, ctx, member:discord.Member=None):
       if member == None:
         member = ctx.author
 
-      pic = await ctx.reply("Loading Identification profile..")
+      pic2 = discord.Embed(description=f"Loading Identification profile {loading2}", color=inv)
+
+      pic = await ctx.reply(embed=pic2)
       avatar = await member.display_avatar.read()
     
       welcome_image = await self.client.loop.run_in_executor(None, lambda: create_welcome(member, avatar, member.guild.member_count))
 
       await pic.delete()
       await asyncio.sleep(1)
-      await ctx.reply(file=discord.File(welcome_image, "identification.gif"))
+      await ctx.send(f"{ctx.author.mention}",file=discord.File(welcome_image, "identification.gif"))
 
     
       

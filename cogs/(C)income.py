@@ -5,7 +5,7 @@ import pickle
 import random
 import asyncio
 import json
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, crates, ar, inv
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, crates, ar, inv, disabled
 from places import desert, ba, ruins
 
 from discord.ui import *
@@ -88,7 +88,7 @@ class income(commands.Cog):
         default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
         try:
-          log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just recruited `{option}` {sold}\n-\nFrom: {ctx.guild.name} server", color=green)
+          log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just recruited `{option}` {sold}\n-\nFrom: {ctx.guild.name} server", color=inv)
           await default_log.send(embed=log)
         except:
           pass
@@ -105,6 +105,8 @@ class income(commands.Cog):
     @cooldown(1, per_sec=15, type=commands.BucketType.user)
     # @cooldown(1, per_sec=5, type=commands.BucketType.user)
     async def expedition(self, ctx):
+
+      not_you = discord.Embed(description=f"This action cannot be done by you {disabled}", color=inv)
 
       
       
@@ -177,13 +179,13 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server", color=inv)
             await default_log.send(embed=log)
           except:
             pass
           return
         else:
-          await interaction.response.send_message("This option is not for you!", ephemeral=True)
+          await interaction.response.send_message(embed=not_you, ephemeral=True)
 
       async def button_callback_base(interaction):
         if interaction.user == ctx.author:
@@ -214,7 +216,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{bac}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{bac}` {res}\n-\nFrom: {ctx.guild.name} server", color=inv)
             await default_log.send(embed=log)
           except:
             pass
@@ -222,7 +224,7 @@ class income(commands.Cog):
 
           
         else:
-          await interaction.response.send_message("This option is not for you!", ephemeral=True)
+          await interaction.response.send_message(embed=not_you, ephemeral=True)
 
       async def button_callback_desert(interaction):
         if interaction.user == ctx.author:
@@ -251,13 +253,13 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{dec}` {res}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{dec}` {res}\n-\nFrom: {ctx.guild.name} server", color=inv)
             await default_log.send(embed=log)
           except:
             pass
           return
         else:
-          await interaction.response.send_message("This option is not for you!", ephemeral=True)
+          await interaction.response.send_message(embed=not_you, ephemeral=True)
   
       pr.callback = button_callback_ruins
       pb.callback = button_callback_base
@@ -274,7 +276,7 @@ class income(commands.Cog):
       if crate != "crate":
         return
       if member_data.crate <= 0:
-        error = discord.Embed(title="Error!", description=f"Commander, you don't have a {crate} to open", color=yellow)
+        error = discord.Embed(title="Error!", description=f"Commander, you don't have a {crate} to open", color=red)
         await ctx.reply(embed=error)
       else:
         async with ctx.typing():
@@ -341,7 +343,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just openned a {crate}\n> Containing:\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}\n-\nFrom: {ctx.guild.name} server", color=green)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just openned a {crate}\n> Containing:\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}\n-\nFrom: {ctx.guild.name} server", color=inv)
             await default_log.send(embed=log)
           except:
             pass

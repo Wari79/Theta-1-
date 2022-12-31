@@ -827,6 +827,9 @@ class shop(commands.Cog):
   
           
           elif construct_options.values[0] == "wall":
+            if member_data.wall >= 3:
+              max = discord.Embed(title="Max Wall Reached",description=f"You already have a level 3 {wall}, that's the max for now!")
+              return
             ask = discord.Embed(description=f"How many {wall} are you requesting to construct?", color=yellow)
             await confirmation.edit(embed=ask, view=None)
             
