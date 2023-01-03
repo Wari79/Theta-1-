@@ -184,11 +184,41 @@ class quest(commands.Cog):
         member_data.resources += 450
         member_data.strikes += 2
         save_member_data2(message.author.id, member_data2)
-        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 450 {res}\n> 3 {wall}\n> 1 {crate}\n> 2 {strikes}", color=green)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 450 {res}\n> 3 {wall}\n> 1 {crate}\n> 2 {strike}", color=green)
         await message.channel.send(f"{message.author.mention}", embed=lvl)
         return
       else:
         pass
+
+      if member_data2.xp >= 45 and member_data2.level <= 5:
+        member_data2.level += 1
+        member_data2.xp = 0
+        member_data.wall += 3
+        member_data.crate += 2
+        member_data.resources += 550
+        member_data.strikes += 2
+        save_member_data2(message.author.id, member_data2)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 550 {res}\n> 3 {wall}\n> 2 {crate}\n> 2 {strike}", color=green)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
+        return
+      else:
+        pass
+
+      if member_data2.xp >= 55 and member_data2.level <= 6:
+        member_data2.level += 1
+        member_data2.xp = 0
+        member_data.wall += 1
+        member_data.spy += 3 
+        member_data.resources += 600
+        member_data.strikes += 3
+        member_data.crate += 2
+        save_member_data2(message.author.id, member_data2)
+        lvl = discord.Embed(title="Level Up!", description=f"you just levelled up!, you're now level `{member_data2.level}`\n-\n**Rewards:**\n> 600 {res}\n> 1 {wall}\n> 2 {crate}\n> 3 {strike}\n> 1 {spy}", color=green)
+        await message.channel.send(f"{message.author.mention}", embed=lvl)
+        return
+      else:
+        pass
+      
 
 
 

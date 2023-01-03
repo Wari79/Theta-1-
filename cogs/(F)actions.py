@@ -48,7 +48,7 @@ class actions(commands.Cog):
       if victim == ctx.author:
         async with ctx.typing():
           await asyncio.sleep(2)
-        error1 = discord.Embed(description="Apologies!! we cannot initiate the raid on the same base, mention seomone's base instead!", color=0xFF0000)
+        error1 = discord.Embed(description="Mention a member. Not yourself.", color=red)
         await ctx.reply(embed=error1)
         ctx.command.reset_cooldown(ctx)
         return
@@ -62,9 +62,10 @@ class actions(commands.Cog):
             ctx.command.reset_cooldown(ctx)
             return
           else:
+            fhp = member_data2.soldiers * 1 + member_data2.tanks * 10
 
-            if member_data2.soldiers <= 150 and member_data2.tanks <= 0:
-              error2 = discord.Embed(description="Cannot initiate an attack on a base including less than `150` HP", color=0xFF0000)
+            if fhp >= 150:
+              error2 = discord.Embed(description="Cannot initiate an attack on a base including less than `150` HP", color=red)
               await ctx.reply(embed=error2)
               ctx.command.reset_cooldown(ctx)
               return

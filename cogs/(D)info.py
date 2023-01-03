@@ -4,7 +4,7 @@ import os
 import pickle
 import asyncio
 import json
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv, wall_level_1, wall_level_2, wall_level_3, wall_level_1_empty, wall_level_2_empty, wall_level_3_empty
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv, wall_level_1, wall_level_2, wall_level_3, wall_level_1_empty, wall_level_2_empty, wall_level_3_empty, ar, py
 from discord.ui import *
 
 from discord import app_commands
@@ -53,7 +53,30 @@ class info(commands.Cog):
         self.client = client
 
     def cooldown(rate, per_sec=0, per_min=0, per_hour=0, type=commands.BucketType.default):
-        return commands.cooldown(rate, per_sec + 60 * per_min + 3600 * per_hour, type)
+      return commands.cooldown(rate, per_sec + 60 * per_min + 3600 * per_hour, type)
+
+      
+    @commands.hybrid_command(description="Shows theta's statistics")
+    async def theta(self, ctx):
+      list_of_theta_members=[]
+      for guild in self.client.guilds:
+        for member in guild.members:
+          member_data = load_member_data(member.id)
+
+          if member_data.resources >= 1:
+            list_of_theta_members.append(f"{member.name}#{member.discriminator}")
+          else:
+            pass
+      ham = self.client.get_user(798280308071596063)
+      umar = self.client.get_user(686649585422434361)
+      theta_server = Button(label="Support Server", url="https://discord.gg/82Jf7uEqDs")
+      theta_open_source = Button(label="Open Source", url="https://replit.com/@Warsbro/Theta-1#main.py")
+      view = View()
+      view.add_item(theta_server)
+      view.add_item(theta_open_source)
+      
+      theta = discord.Embed(title="Theta's Statistics", description=f"**Theta's ID** {ar} `{self.client.user.id}`\n-\n**Created With** {ar} `Discord.py` {py}\n-\n**Created** {ar} <t:1634999880:R> (<t:1634999880:D>)\n-\n**Development Team** {ar} `[{ham} - {umar}]`\n-\n**Active Theta Players** {ar} `{len(list(set(list_of_theta_members)))}`", color=red)
+      await ctx.reply(embed=theta, view=view)
 
 
 
@@ -192,7 +215,7 @@ class info(commands.Cog):
       #----
       embeds = discord.Embed(title=f"{int.user.display_name}'s Base", color=red) #18191C #0x36393F
       if member_data.wall < 1:
-        embeds.add_field(name="Protection", value=f"{wall} {wall_level_1_empty}{wall_level_2_empty}{wall_level_3_empty}`level 0`\n{member_data.strikes} {strike}", inline = True)
+        embeds.add_field(name="Protection", value=f"{wall} {wall_level_1_empty}{wall_level_2_empty}{wall_level_3_empty} `level 0`\n{member_data.strikes} {strike}", inline = True)
         
       if member_data.wall == 1:
         embeds.add_field(name="Protection", value=f"{wall} {wall_level_1}{wall_level_2_empty}{wall_level_3_empty} `level 1`\n{member_data.strikes} {strike}", inline = True)
@@ -227,6 +250,18 @@ class info(commands.Cog):
 
       if member_data2.level == 4:
         required = "35"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
+
+      if member_data2.level == 5:
+        required = "45"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
+        
+      if member_data2.level == 6:
+        required = "55"
+        embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
+
+      if member_data2.level == 7:
+        required = "65"
         embeds.set_footer(text = f"{int.user.name}'s level : {member_data2.level} | {member_data2.xp}/{required} xp to level up")
         
       

@@ -52,7 +52,7 @@ def determine_prefix(bot, msg):
     return base
 
 # ------------------CONFIGS--------------------------------
-staff = [798280308071596063, 959199497555157034, 686649585422434361]
+staff = [798280308071596063, 686649585422434361]
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix=determine_prefix, owner_ids=set(staff), intents=intents
 )
@@ -95,7 +95,7 @@ async def r(ctx):
   await client.reload_extension("cogs.(E)shop")
   await client.reload_extension("cogs.(F)actions")
   await client.reload_extension("cogs.(F)actions2")
-  await client.reload_extension("cogs.(H)quest")
+  # await client.reload_extension("cogs.(H)quest")
   await client.reload_extension("cogs.(C)income")
   await client.reload_extension("cogs.(I)levels")
   await client.reload_extension("cogs.(Extra)ahmed")

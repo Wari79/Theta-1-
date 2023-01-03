@@ -22,11 +22,12 @@ inv = 0x2F3136
 ded = "https://media.discordapp.net/attachments/1042487672217796631/1046741502954577961/dead-removebg-preview.png"
 loading = "<a:loading:1058423343189082153>"
 loading2 = "<a:loading_2:1058486554848415906>"
+py = "<:python:1058755762396078110>"
 
-ar = "<:red_arrow:1058526256175530036>"
+ar = "<:arrowred:1058760753349414993>"
 disabled = "<:rejected:1058527663481950208>"
 
-wall_level_1 = "<:wall_level_1:1058542325627895848>"
+wall_level_1 = "<:wall_level_1:1058762796243882004>"
 wall_level_2 = "<:wall_level_2:1058543924060377218>"
 wall_level_3 = "<:wall_level_3:1058543943287058512>"
 

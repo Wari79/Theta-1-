@@ -13,6 +13,7 @@ from discord import app_commands
 
 
 
+
 data_filename = "currency files/data"
 data_filename2 = "levels/levels"
 
@@ -88,10 +89,13 @@ class income(commands.Cog):
         default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
         try:
-          log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just recruited `{option}` {sold}\n-\nFrom: {ctx.guild.name} server", color=inv)
+          log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just recruited `{option}` {sold}\n-\nFrom: {ctx.guild.name} server. [Recruit]({ctx.message.jump_url})", color=inv)
           await default_log.send(embed=log)
         except:
           pass
+
+    
+      
         
 
       
@@ -179,7 +183,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server", color=inv)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just caught `{ruinsc}` {res}\n-\nFrom: {ctx.guild.name} server. [Expedition]({ctx.message.jump_url})", color=inv)
             await default_log.send(embed=log)
           except:
             pass
@@ -343,7 +347,7 @@ class income(commands.Cog):
           default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
 
           try:
-            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just openned a {crate}\n> Containing:\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}\n-\nFrom: {ctx.guild.name} server", color=inv)
+            log = discord.Embed(description=f"**{ctx.author.name}#{ctx.author.discriminator}** just openned a {crate}\n> Containing:\n{option_r} {res}\n{option_s} {sold}\n{option_t} {tank}\n{option_Spy} {spy}\n{option_rare2} {r_emoji}\n-\nFrom: {ctx.guild.name} server. [Crate]({ctx.message.jump_url})", color=inv)
             await default_log.send(embed=log)
           except:
             pass
@@ -360,6 +364,7 @@ def load_data():
         if os.path.isfile(data_filename):
             with open(data_filename, "rb") as file:
                 return pickle.load(file)
+                
         else:
             return dict()
 

@@ -4,7 +4,7 @@ import os
 import pickle
 import random
 import asyncio
-from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow
+from emojis import tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv
 
 from discord.ui import *
 
@@ -684,7 +684,7 @@ class shop(commands.Cog):
 
     @commands.hybrid_command(description="Construct a weapon to aid your base!",aliases = ["cons"])
     @commands.guild_only()
-    @cooldown(1, per_sec=35, type=commands.BucketType.user)
+    @cooldown(1, per_sec=15, type=commands.BucketType.user)
     async def construct(self, ctx):
       member_data = load_member_data(ctx.author.id)
       
@@ -712,9 +712,11 @@ class shop(commands.Cog):
       embed1 = discord.Embed(description=f"What shall we construct, commander?", color=green)
 
       confirmation = await ctx.reply(embed = embed1, view=co)
+      default_log = discord.utils.get(self.client.get_all_channels(), id=1057356641911181373)
       
 
       async def options(interaction):
+        
         if interaction.user == ctx.author:
           if construct_options.values[0] == "tank":
               ask = discord.Embed(description=f"How many {tank} are you requesting to construct?", color=yellow)
@@ -757,6 +759,9 @@ class shop(commands.Cog):
                   member_data.resources -= int(calculation)
                   member_data.tanks += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                 
+                  dt = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {tank} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=dt)
                   return
                 
               async def button_x_c(interaction):
@@ -809,6 +814,8 @@ class shop(commands.Cog):
                   member_data.resources -= int(calculation)
                   member_data.spy += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                  ds = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {spy} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=ds)
                   return
                 
             async def button_x_c(interaction):
@@ -828,12 +835,21 @@ class shop(commands.Cog):
           
           elif construct_options.values[0] == "wall":
             if member_data.wall >= 3:
-              max = discord.Embed(title="Max Wall Reached",description=f"You already have a level 3 {wall}, that's the max for now!")
+              max = discord.Embed(title="Max Wall Reached",description=f"You already have a level 3 {wall}, that's the max for now!", color=inv)
+              await confirmation.edit(embed=max, view=None)
+              ctx.command.reset_cooldown(ctx)
               return
             ask = discord.Embed(description=f"How many {wall} are you requesting to construct?", color=yellow)
             await confirmation.edit(embed=ask, view=None)
             
             amount = await self.client.wait_for("message",check=lambda m: m.author == ctx.author and m.channel.id == ctx.channel.id)
+
+            if int(amount.content) > 3:
+              cant = discord.Embed(description=f"You can't construct more than 3 {wall}, try again!", color=inv)
+              await confirmation.delete()
+              await ctx.reply(embed=cant)
+              ctx.command.reset_cooldown(ctx)
+              return
 
             if not amount.content[0].isnumeric():
                 invamount = discord.Embed(title="Invalid Amount", description=f"Sorry, `{amount.content}` is an invalid integer/number, please include an integer and nothing else.\n`Ex. (1 --> 100)`", color=red)
@@ -868,6 +884,8 @@ class shop(commands.Cog):
                   member_data.resources -= int(calculation)
                   member_data.wall += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                  dw = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {wall} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=dw)
                   return
                 
             async def button_x_c(interaction):
@@ -917,6 +935,8 @@ class shop(commands.Cog):
                   member_data.resources -= int(calculation)
                   member_data.strikes += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                  dst = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {strike} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=dst)
                   return
                 
             async def button_x_c(interaction):
@@ -966,6 +986,8 @@ class shop(commands.Cog):
                   member_data.resources -= int(calculation)
                   member_data.scrap += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                  dsc = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {scrap} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=dsc)
                   return
                 
             async def button_x_c(interaction):
@@ -1019,6 +1041,8 @@ class shop(commands.Cog):
                   member_data.medals -= int(calculation)
                   member_data.crate += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                  dcr = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {crate} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=dcr)
                   return
                 
             async def button_x_c(interaction):
@@ -1078,6 +1102,8 @@ class shop(commands.Cog):
                   member_data.scrap -= int(calculation)
                   member_data.ca += int(amount.content)
                   save_member_data(ctx.author.id, member_data)
+                  dca = discord.Embed(description=f"{ctx.author} just constructed `{amount.content}` {ca} in {ctx.guild.name}. [Construct]({ctx.message.jump_url})")
+                  await default_log.send(embed=dca)
                   return
                 
             async def button_x_c(interaction):

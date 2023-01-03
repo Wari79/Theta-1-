@@ -16,8 +16,9 @@ from googletrans import Translator
 import traceback
 import sys
 import time
-from emojis import suit, tank, tank2, sold, res, hearts, dead, comp, arr, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv, loading2
+from emojis import suit, tank, tank2, sold, res, hearts, dead, comp, wall, strike, ca, scrap, spy, medal, crate, red, green, yellow, inv, loading2, ar, py
 data_filename = "currency files/data"
+data_filename2 = "levels/levels"
 from discord import app_commands
 from discord.ui import *
 from PIL import Image, ImageFont, ImageDraw, ImageStat
@@ -111,11 +112,12 @@ def create_welcome(user:discord.Member, user_avatar, join_pos):
         WELCOME_TEXT = "Identification Card"
         NAME_TEXT = user.name
         INFO_TEXT = [
-            f"Subject Tag: #{user.discriminator}",
-            f"Subject ID: {user.id}",
-            user.created_at.strftime("Account made in (%B %d, %Y)"),
-            f"Status: {user.status.name.upper()}",
-            f"Activity:"] + textwrap.wrap(user.activity.name if user.activity else "UNDETECTED", 25)
+          f"Subject Tag: #{user.discriminator}", 
+          f"Subject ID: {user.id}", 
+          f"Account Created: {user.created_at.strftime('%B %d, %Y')}", 
+          f"Status: {user.status.name.upper()}", 
+          f"Activity:"] + textwrap.wrap(user.activity.name if user.activity else "UNDETECTED", 25)
+  
     
         for letter_range in range(len(WELCOME_TEXT)):
             im = image_array[-1].copy()
@@ -178,7 +180,8 @@ def restart_bot():
     os.execv(sys.executable, ["python"] + sys.argv)
 
 class Data:
-      def __init__(self, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg):
+      def __init__(self, xp, level, resources, soldiers, tanks, spy, wall, strikes, s, r, scrap, crate, ca, medals, cfc, cfca, mesg):
+        self.level = level
         self.resources = resources
         self.soldiers = soldiers
         self.tanks = tanks
@@ -194,11 +197,7 @@ class Data:
         self.ca = ca
         self.cfc = cfc
         self.cfca = cfca
-
-
-
-
-
+        self.xp = xp
 
 class staff(commands.Cog):
     def __init__(self, client):
@@ -238,6 +237,8 @@ class staff(commands.Cog):
       await self.client.change_presence(status=discord.Status.do_not_disturb, activity=discord.Activity(type=discord.ActivityType.playing, name=f"with {len(self.client.guilds)} servers and {len(self.client.users)} members"))
       done = discord.Embed(description="Refreshed bot's appearance", color=inv)
       await ctx.reply(embed=done)
+
+    
         
     
     
@@ -283,11 +284,11 @@ class staff(commands.Cog):
       
       og3.add_field(name=f"`{prefix}give @member/id`", value="Interactive command to give the member any weaponized object inside the pickle file", inline=False)
 
-      og3.add_field(name=f"{prefix}reset @member/id", value="Resets mentioned member's base", inline=False)
+      og3.add_field(name=f"`{prefix}reset @member/id`", value="Resets mentioned member's base", inline=False)
       
       og3.add_field(name=f"`{prefix}take @member/id`", value="Interactive command to take away any weaponized object inside the pickle file from the member", inline=False)
       
-      og3.add_field(name=f"`{prefix}subtract_q1 (amount) @member/id`", value="Subtracts amounts of messages sent by user in quest 1", inline=False)
+      
 
       
 
@@ -332,6 +333,96 @@ class staff(commands.Cog):
               break
       await message.clear_reactions()
 
+    # @commands.command()
+    # @commands.is_owner()
+    # async def board(self, ctx):
+    #   list_of_theta_members=[]
+      
+    #   for guild in self.client.guilds:
+    #     for member in guild.members:
+    #       member_data = load_member_data(member.id)
+    #       member_data2 = load_member_data2(member.id)
+
+    #       if member_data2.xp >= 1:
+    #         list_of_theta_members.append(f"**{member.name}#{member.discriminator}** {ar} level `{member_data2.level}`")
+          
+    #       else:
+    #         pass
+    #   final = list(set(list_of_theta_members))
+      
+      
+      # test = discord.Embed(description=f"\n".join(final), color=inv)
+      # await ctx.reply(embed=test)         
+
+
+    @commands.hybrid_command(description="Shows you boards of players")
+    async def leaderboard(self, ctx):
+      moment = discord.Embed(description="Loading boards..", color=inv)
+      moment_send = await ctx.reply(embed=moment)
+      list_of_theta_members_levels = []
+      list_of_theta_members_xp = []
+      
+      for guild in self.client.guilds:
+        for member in guild.members:
+          member_data = load_member_data(member.id)
+          member_data2 = load_member_data2(member.id)
+
+          if member_data2.level >= 1:
+            list_of_theta_members_levels.append(f"**{member.name}#{member.discriminator}** {ar} level `{member_data2.level}`")
+
+          if member_data2.xp >= 1:
+            list_of_theta_members_xp.append(f"**{member.name}#{member.discriminator}** {ar} `{member_data2.xp}` xp in level `{member_data2.level}`")
+          
+          else:
+            pass
+      lvl = list(set(list_of_theta_members_levels))
+      xp = list(set(list_of_theta_members_xp))
+      conf1_embed = discord.Embed(description="Please a select a field in order to show its players!", color=inv)
+
+      field_option = Select(placeholder="Select a field", options=[
+        discord.SelectOption(label="Level Board", value="level"),
+        discord.SelectOption(label="XP Board", value="xp"),
+      ])
+
+      view = View()
+      view.add_item(field_option)
+
+      conf2 = await moment_send.edit(embed=conf1_embed, view=view)
+
+      async def options(interaction):
+        if field_option.values[0] == "level":
+          level_embed = discord.Embed(title="Board of levels", description="\n".join(lvl), color=inv)
+          await interaction.response.send_message(embed=level_embed, ephemeral=False)
+          await conf2.delete()
+          
+
+        elif field_option.values[0] == "xp":
+          xp_embed = discord.Embed(title="Board of xp", description="\n".join(xp), color=inv)
+          await interaction.response.send_message(embed=xp_embed, ephemeral=False)
+          await conf2.delete()
+
+      field_option.callback = options
+
+
+    @app_commands.command(description = "DM command using theta!")
+    async def dm(self, interaction: discord.Interaction, user_id : str, dm_message: str): 
+      user = await self.client.fetch_user(user_id)
+
+      try:
+
+          embed = discord.Embed(description = f"**{dm_message}**", colour = red)
+          embed.set_footer(text = f"Message sent to you by {interaction.user.name}#{interaction.user.discriminator} | powered by Theta")
+  
+          await user.send(embed=embed)
+          
+          await interaction.response.send_message(f"DM successfully sent!", ephemeral=True)
+      except discord.Forbidden:
+          
+          error = discord.Embed(description=f"Couldn't dm {user.name} :x:", color=inv)
+          await interaction.response.send_message(embed=error)
+
+     
+  
     
 
 
@@ -396,7 +487,10 @@ class staff(commands.Cog):
       if member == None:
         member = ctx.author
       member_data = load_member_data(member.id)
+      member_data2 = load_member_data2(member.id)
       member_data.soldiers = 0
+      member_data2.level = 0
+      member_data2.xp = 0
       member_data.tanks = 0
       member_data.resources = 0
       member_data.spy = 0
@@ -651,21 +745,32 @@ class staff(commands.Cog):
 
 
 
-    @commands.hybrid_command(description="Identify a member with a cool format!", aliases = ["id"])
+    # @app_commands.command(description="Identify yourself or a member with theta's format!")
+    # async def identify(self, interaction:discord.Interaction, member:discord.Member=None):
+    #   if member == None:
+    #     member = interaction.user
+
+    #   await interaction.response.defer(ephemeral=False)
+    #   avatar = await member.display_avatar.read()
+    
+    #   welcome_image = await self.client.loop.run_in_executor(None, lambda: create_welcome(member, avatar, member.guild.member_count))
+
+    #   await interaction.followup.send(file=discord.File(welcome_image, "identification.gif"), ephemeral=False)
+
+    @commands.hybrid_command(description="Identify yourself or a member with theta's format!")
     async def identify(self, ctx, member:discord.Member=None):
       if member == None:
         member = ctx.author
 
-      pic2 = discord.Embed(description=f"Loading Identification profile {loading2}", color=inv)
-
-      pic = await ctx.reply(embed=pic2)
+      loads = discord.Embed(description=f"**Loading Identification Card** {loading2}", color=red)
+      loads_e = await ctx.reply(embed=loads)
       avatar = await member.display_avatar.read()
     
       welcome_image = await self.client.loop.run_in_executor(None, lambda: create_welcome(member, avatar, member.guild.member_count))
 
-      await pic.delete()
-      await asyncio.sleep(1)
-      await ctx.send(f"{ctx.author.mention}",file=discord.File(welcome_image, "identification.gif"))
+      await loads_e.delete()
+
+      await ctx.reply(file=discord.File(welcome_image, "identification.gif"), ephemeral=False)
 
     
       
@@ -692,7 +797,7 @@ def load_member_data(member_ID):
     data = load_data()
 
     if member_ID not in data:
-        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
     return data[member_ID]
 
@@ -704,3 +809,28 @@ def save_member_data(member_ID, member_data):
     with open(data_filename, "wb") as file:
         pickle.dump(data, file)
 
+
+
+def load_data2():
+        if os.path.isfile(data_filename2):
+            with open(data_filename2, "rb") as file:
+              return pickle.load(file)
+        else:
+            return dict()
+
+
+def load_member_data2(member_ID):
+    data = load_data2()
+
+    if member_ID not in data:
+        return Data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0)
+
+    return data[member_ID]
+
+def save_member_data2(member_ID, member_data2):
+    data = load_data2()
+
+    data[member_ID] = member_data2
+
+    with open(data_filename2, "wb") as file:
+        pickle.dump(data, file)

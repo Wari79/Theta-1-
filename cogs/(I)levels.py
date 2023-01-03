@@ -61,9 +61,9 @@ class levels(commands.Cog):
       
 
     @commands.command() 
-    async def xp(self, ctx):
+    async def level(self, ctx):
       member_data2 = load_member_data2(ctx.author.id)
-      xp_status = discord.Embed(title="Current Profile", description=f"**Level:** `{member_data2.level}`\n-\n**XP:** `{member_data2.xp}`", color=yellow)
+      xp_status = discord.Embed(title="Current Profile", description=f"**Level:** `{member_data2.level}`\n-\n**XP:** `{member_data2.xp}`", color=red)
       await ctx.reply(embed=xp_status)
 
     @commands.command()
