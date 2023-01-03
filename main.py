@@ -77,7 +77,6 @@ async def on_ready():
     await client.load_extension("cogs.(H)quest")
     await client.load_extension("cogs.(C)income")
     await client.load_extension("cogs.(I)levels")
-    await client.load_extension("cogs.(Extra)ahmed")
     await client.load_extension("cogs.logging")
     await client.load_extension("cogs.maintenance")
     
@@ -96,24 +95,16 @@ async def r(ctx):
   await client.reload_extension("cogs.(F)actions")
   await client.reload_extension("cogs.(F)actions2")
   # await client.reload_extension("cogs.(H)quest")
+  
   await client.reload_extension("cogs.(C)income")
   await client.reload_extension("cogs.(I)levels")
-  await client.reload_extension("cogs.(Extra)ahmed")
   await client.reload_extension("cogs.logging")
   await client.reload_extension("cogs.maintenance")
+  await tree.sync()
   await asyncio.sleep(2)
   third = discord.Embed(description="Refreshed **10** cog files", color=green)
   await second.edit(embed=third)
 
-@client.command()
-@commands.is_owner()
-async def sync(ctx):
-  on_it = discord.Embed(description=f"On it {loading}", color=red)
-  done = await ctx.reply(embed=on_it)
-  await tree.sync()
-  await asyncio.sleep(3)
-  sync_made = discord.Embed(description="**Successfully synced slash commands!**", color=green)
-  await done.edit(embed=sync_made)
 
 
 # @client.command()

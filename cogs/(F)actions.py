@@ -64,8 +64,8 @@ class actions(commands.Cog):
           else:
             fhp = member_data2.soldiers * 1 + member_data2.tanks * 10
 
-            if fhp >= 150:
-              error2 = discord.Embed(description="Cannot initiate an attack on a base including less than `150` HP", color=red)
+            if fhp <= 150:
+              error2 = discord.Embed(description="This base cannot be attacked due to theta's shield :shield:", color=red)
               await ctx.reply(embed=error2)
               ctx.command.reset_cooldown(ctx)
               return
@@ -164,6 +164,7 @@ class actions(commands.Cog):
                               health2 = hp2 + powert2 - powert1
 
                               async with ctx.typing():
+                                await war.delete()
                                 anas = discord.Embed(description="Analyzing Attack Results", color=0xfbc28d)
                         
                                 anal = await ctx.send(embed=anas)
@@ -181,8 +182,9 @@ class actions(commands.Cog):
                                 await anal.edit(embed=anas5)
                                 anas6 = discord.Embed(description="⚔️ :shield: ⚔️ Finalizing Calculations ⚔️ :shield: ⚔️", color=0xfbc28d)
                                 await asyncio.sleep(2)
-                                await anal.edit(embed=anas6)
+                                test2 = await anal.edit(embed=anas6)
                                 await asyncio.sleep(2)
+                                await test2.delete()
 
                               if hp1r > hp2r:
 
@@ -549,7 +551,8 @@ class actions(commands.Cog):
                     break
                     
         else:
-          await ctx.reply(f"Commander {ctx.author.name}, you can't attack a bot.")
+          bot_ping = discord.Embed(description="You bastard, trying to attack one of us now? *pathetic*", color=inv)
+          await ctx.reply(embed=bot_ping)
           ctx.command.reset_cooldown(ctx)
 
 

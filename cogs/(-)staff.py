@@ -405,13 +405,15 @@ class staff(commands.Cog):
 
 
     @app_commands.command(description = "DM command using theta!")
+    @commands.is_owner()
+    @commands.guild_only()
     async def dm(self, interaction: discord.Interaction, user_id : str, dm_message: str): 
       user = await self.client.fetch_user(user_id)
 
       try:
 
           embed = discord.Embed(description = f"**{dm_message}**", colour = red)
-          embed.set_footer(text = f"Message sent to you by {interaction.user.name}#{interaction.user.discriminator} | powered by Theta")
+          embed.set_footer(text = f"Message sent to you by: Theta's Development Team | powered by Theta")
   
           await user.send(embed=embed)
           
@@ -570,7 +572,8 @@ class staff(commands.Cog):
   
     @commands.command()
     @commands.is_owner()
-    async def give(self, ctx, member:discord.Member):
+    async def give(self, ctx, user_id):
+      member = await self.client.fetch_user(user_id)
       member_data = load_member_data(member.id)
       first = discord.Embed(description=f"What shall I give this commander, general?\n-\nSoldiers {sold}\nTanks {tank}\nRobotic Spy :detective:\nResources {res}\nWall {wall}\nStrikes {strike}\nCrate {crate}", color=green)
       await ctx.reply(embed=first)

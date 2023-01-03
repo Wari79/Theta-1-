@@ -203,7 +203,7 @@ class errors(commands.Cog):
 
 
 
-            system_error = discord.Embed(title=f"Script Error in '{ctx.guild.name}'", description=f"`{str(error)}`\n-\nCommand Executer: {ctx.author}({ctx.author.id})\nServer ID: {ctx.guild.id}\nServer Owner: {ctx.guild.owner}\nCommand Message: [Error here]({ctx.message.jump_url})", color=inv)
+            system_error = discord.Embed(title=f"Script Error in '{ctx.guild.name}'", description=f"`{str(error)}`\n-\nCommand Executer: {ctx.author} ({ctx.author.id})\nServer ID: {ctx.guild.id}\nServer Owner: {ctx.guild.owner}\nCommand Message: [Error here]({ctx.message.jump_url})", color=inv)
 
             await default_log.send("<@&1047250525323808788>", embed=system_error)
 
